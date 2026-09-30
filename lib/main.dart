@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'profile.dart';
+
+import 'chats.dart';
 
 void main() {
   runApp(const MyApp());
@@ -8,11 +9,14 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-@override
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const ProfileScreen(),
+      home: const ChatScreen(),
+      routes: {
+        '/chats': (context) => const ChatScreen(),
+      },
     );
   }
 }
