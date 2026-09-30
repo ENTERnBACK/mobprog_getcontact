@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'new_chat_screen.dart';
+import 'widget/common.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
@@ -15,10 +17,7 @@ class ChatScreen extends StatelessWidget {
               height: 75,
               decoration: const BoxDecoration(
                 border: Border(
-                  bottom: BorderSide(
-                    color: Colors.grey,
-                    width: 0.3,
-                  ),
+                  bottom: BorderSide(color: Colors.grey, width: 0.3),
                 ),
               ),
               child: Row(
@@ -30,11 +29,9 @@ class ChatScreen extends StatelessWidget {
                     width: 62,
                     height: 55,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF19181D),
+                      color: kCard,
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(
-                        color: Colors.grey.shade800,
-                      ),
+                      border: Border.all(color: Colors.grey.shade800),
                     ),
                     child: const Icon(
                       Icons.search,
@@ -43,17 +40,7 @@ class ChatScreen extends StatelessWidget {
                     ),
                   ),
 
-                  const Expanded(
-                    child: Center(
-                      child: Text(
-                        'SMS Messages',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                  ),
+                  const Expanded(child: SizedBox()),
 
                   const Padding(
                     padding: EdgeInsets.only(right: 30),
@@ -83,20 +70,15 @@ class ChatScreen extends StatelessWidget {
                           width: double.infinity,
                           padding: const EdgeInsets.all(28),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF19181D),
+                            color: kCard,
                             borderRadius: BorderRadius.circular(28),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Icon(
-                                Icons.chat,
-                                color: Colors.blue,
-                                size: 50,
-                              ),
-
+                              const Icon(Icons.chat,
+                                  color: Colors.blue, size: 50),
                               const SizedBox(height: 20),
-
                               const Text(
                                 'No active chat',
                                 style: TextStyle(
@@ -105,9 +87,7 @@ class ChatScreen extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-
                               const SizedBox(height: 25),
-
                               Row(
                                 children: [
                                   Container(
@@ -115,24 +95,16 @@ class ChatScreen extends StatelessWidget {
                                     height: 45,
                                     decoration: BoxDecoration(
                                       color: Colors.blue.shade900,
-                                      borderRadius:
-                                          BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
-                                    child: const Icon(
-                                      Icons.add,
-                                      color: Colors.blue,
-                                      size: 32,
-                                    ),
+                                    child: const Icon(Icons.add,
+                                        color: Colors.blue, size: 32),
                                   ),
-
                                   const SizedBox(width: 15),
-
                                   const Text(
                                     'You can start using this button.',
                                     style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                    ),
+                                        color: Colors.white, fontSize: 18),
                                   ),
                                 ],
                               ),
@@ -148,7 +120,7 @@ class ChatScreen extends StatelessWidget {
                           height: 180,
                           padding: const EdgeInsets.all(28),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF19181D),
+                            color: kCard,
                             borderRadius: BorderRadius.circular(28),
                           ),
                           child: const Align(
@@ -167,23 +139,11 @@ class ChatScreen extends StatelessWidget {
                     ),
                   ),
 
-                  // Floating Add Button
-                  Positioned(
+                  // 2. Add Button
+                  const Positioned(
                     right: 28,
                     bottom: 25,
-                    child: SizedBox(
-                      width: 100,
-                      height: 100,
-                      child: FloatingActionButton(
-                        backgroundColor: Colors.blue.shade900,
-                        onPressed: () {},
-                        child: const Icon(
-                          Icons.add,
-                          color: Colors.white,
-                          size: 50,
-                        ),
-                      ),
-                    ),
+                    child: AddChatButton(),
                   ),
                 ],
               ),
@@ -192,32 +152,14 @@ class ChatScreen extends StatelessWidget {
             // Bottom Navigation
             Container(
               height: 90,
-              decoration: const BoxDecoration(
-                color: Color(0xFF19181D),
-              ),
+              decoration: const BoxDecoration(color: kCard),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _bottomItem(
-                    Icons.phone,
-                    'Home',
-                    false,
-                  ),
-                  _bottomItem(
-                    Icons.chat_bubble,
-                    'Chat',
-                    true,
-                  ),
-                  _bottomItem(
-                    Icons.shield,
-                    'Protection',
-                    false,
-                  ),
-                  _bottomItem(
-                    Icons.menu,
-                    'Menu',
-                    false,
-                  ),
+                  _bottomItem(Icons.phone, 'Home', false),
+                  _bottomItem(Icons.chat_bubble, 'Chat', true),
+                  _bottomItem(Icons.shield, 'Protection', false),
+                  _bottomItem(Icons.menu, 'Menu', false),
                 ],
               ),
             ),
@@ -227,19 +169,11 @@ class ChatScreen extends StatelessWidget {
     );
   }
 
-  static Widget _bottomItem(
-    IconData icon,
-    String title,
-    bool selected,
-  ) {
+  static Widget _bottomItem(IconData icon, String title, bool selected) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(
-          icon,
-          color: selected ? Colors.blue : Colors.grey,
-          size: 28,
-        ),
+        Icon(icon, color: selected ? Colors.blue : Colors.grey, size: 28),
         const SizedBox(height: 5),
         Text(
           title,
@@ -249,6 +183,28 @@ class ChatScreen extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+// 2. ADD BUTTON  -> buka New Chat
+// ─────────────────────────────────────────────
+class AddChatButton extends StatelessWidget {
+  const AddChatButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 100,
+      height: 100,
+      child: FloatingActionButton(
+        backgroundColor: Colors.blue.shade900,
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const NewChatScreen()),
+        ),
+        child: const Icon(Icons.add, color: Colors.white, size: 50),
+      ),
     );
   }
 }
