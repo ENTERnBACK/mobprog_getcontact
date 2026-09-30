@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'widgets/common.dart';
+import 'widget/common.dart';
 
 class ChatRoomScreen extends StatefulWidget {
   final String name;
