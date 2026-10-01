@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 const Color kCard = Color(0xFF19181D);
@@ -5,19 +6,32 @@ const Color kCard = Color(0xFF19181D);
 class AppHeader extends StatelessWidget {
   final String title;
   final Widget? trailing;
-  const AppHeader({super.key, required this.title, this.trailing});
+
+  const AppHeader({
+    super.key,
+    required this.title,
+    this.trailing,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 75,
       decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Colors.grey, width: 0.3)),
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.grey,
+            width: 0.3,
+          ),
+        ),
       ),
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
             onPressed: () => Navigator.pop(context),
           ),
           const SizedBox(width: 8),
@@ -31,7 +45,7 @@ class AppHeader extends StatelessWidget {
               ),
             ),
           ),
-          if (trailing != null) trailing!,
+          ?trailing,
         ],
       ),
     );
@@ -41,11 +55,17 @@ class AppHeader extends StatelessWidget {
 class AppAvatar extends StatelessWidget {
   final String name;
   final double size;
-  const AppAvatar({super.key, required this.name, required this.size});
+
+  const AppAvatar({
+    super.key,
+    required this.name,
+    required this.size,
+  });
 
   @override
   Widget build(BuildContext context) {
     final initial = name.isEmpty ? '?' : name[0].toUpperCase();
+
     return Container(
       width: size,
       height: size,
