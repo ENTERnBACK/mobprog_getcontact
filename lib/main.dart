@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'login.dart';
 import 'chats/chats.dart';
 
 void main() {
@@ -13,7 +13,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const ChatScreen(),
+      title: 'GetContact',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const WelcomeScreen(),
       routes: {
         '/chats': (context) => const ChatScreen(),
       },
