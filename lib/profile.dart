@@ -1,266 +1,212 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
-class ProfileScreen extends StatelessWidget {
+import 'menu/account_settings_screen.dart';
+import 'menu/birthday_screen.dart';
+import 'menu/edit_profile_screen.dart';
+import 'menu/notifications_screen.dart';
+import 'menu/protection_screen.dart';
+import 'menu/widgets/menu_helpers.dart';
+import 'services/menu_storage_service.dart';
+
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final MenuStorageService _storage = MenuStorageService();
+
+  String _name = 'Elizabeth';
+  String _phone = '+62 812-0000-0000';
+  String? _imagePath;
+  String? _birthday;
+  bool _protectionOn = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    final name = await _storage.getString(StorageKeys.name, 'Elizabeth');
+    final phone =
+        await _storage.getString(StorageKeys.phone, '+62 812-0000-0000');
+    final img = await _storage.getStringOrNull(StorageKeys.imagePath);
+    final bday = await _storage.getStringOrNull(StorageKeys.birthday);
+    final prot = await _storage.getBool(StorageKeys.protectionOn, true);
+    if (!mounted) return;
+    setState(() {
+      _name = name;
+      _phone = phone;
+      _imagePath = img;
+      _birthday = bday;
+      _protectionOn = prot;
+    });
+  }
+
+  Future<void> _open(Widget page) async {
+    await Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+    _load();
+  }
+
+  ImageProvider? get _avatar {
+    if (kIsWeb || _imagePath == null) return null;
+    final file = File(_imagePath!);
+    return file.existsSync() ? FileImage(file) : null;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: kBg,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
           child: Column(
             children: [
-              const CircleAvatar(
-                radius: 46,
-                backgroundColor: Colors.blueGrey,
-                child: Icon(Icons.person, size: 54, color: Colors.white),
-              ),
-              const SizedBox(height: 14),
-
-              const Text(
-                'Elizabeth',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+              GestureDetector(
+                onTap: () => _open(const EditProfileScreen()),
+                child: Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    CircleAvatar(
+                      radius: 54,
+                      backgroundColor: Colors.blueGrey,
+                      backgroundImage: _avatar,
+                      child: _avatar == null
+                          ? const Icon(Icons.person,
+                              size: 54, color: Colors.white)
+                          : null,
+                    ),
+                    const CircleAvatar(
+                      radius: 16,
+                      backgroundColor: kAccent,
+                      child: Icon(Icons.edit, size: 16, color: Colors.white),
+                    ),
+                  ],
                 ),
               ),
+              const SizedBox(height: 12),
+              Text(_name,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold)),
               const SizedBox(height: 4),
-              const Text(
-                '+62800xxxx',
-                style: TextStyle(
-                  fontSize: 13, 
-                  color: Colors.grey,
-                ),
-              ),
-              const SizedBox(height: 24),
+              Text(_phone, style: const TextStyle(color: Colors.grey)),
+              const SizedBox(height: 20),
 
               Row(
                 children: [
                   Expanded(
-                    child: buildTopActionCard(
-                      title: '#19',
-                      subtitle: 'My Tags',
-                      titleColor: Colors.blue,
-                      isIcon: false,
+                    child: _QuickButton(
+                      icon: Icons.sell,
+                      label: 'My Tags',
+                      onTap: () => showSnack(context,
+                          'Terhubung ke halaman My Tags (Nabila) nanti'),
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: buildTopActionCard(
-                      title: '',
-                      subtitle: 'My Profile Summary',
-                      titleColor: Colors.blue,
-                      isIcon: true,
+                    child: _QuickButton(
+                      icon: Icons.person_search,
+                      label: 'My Profile Summary',
+                      onTap: () => showSnack(context,
+                          'Terhubung ke Profile Summary (Nabila) nanti'),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
 
-              buildListCard(
-                icon: Icons.cake_outlined,
-                title: 'Add Your Birthday!',
-                subtitle:
-                    'Add your birthday for celebrations, congratulations, and gifts.',
-                showChevron: true,
+              Container(
+                margin: const EdgeInsets.only(bottom: 10),
+                decoration: BoxDecoration(
+                  color: kCard,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: ListTile(
+                  onTap: () => _open(const BirthdayScreen()),
+                  leading: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: kAccent,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(Icons.cake, color: Colors.white),
+                  ),
+                  title: Text(
+                    _birthday == null ? 'Add Your Birthday!' : 'Your Birthday',
+                    style: const TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    _birthday == null
+                        ? 'Add your birthday for celebrations, promotions and special offers.'
+                        : formatDate(DateTime.parse(_birthday!)),
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+                  trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+                ),
               ),
-              const SizedBox(height: 12),
 
-              buildMenuItem(
+              MenuTile(
                 icon: Icons.notifications,
                 title: 'Notifications',
+                onTap: () => _open(const NotificationsScreen()),
               ),
-              const Divider(color: Colors.grey, height: 1),
-              buildMenuItem(
-                icon: Icons.visibility,
-                title: 'Who Viewed My Profile',
+              MenuTile(
+                icon: Icons.shield,
+                title: 'Activated Protection',
+                subtitle: _protectionOn ? 'Active' : 'Not active',
+                onTap: () => _open(const ProtectionScreen()),
               ),
-              const Divider(color: Colors.grey, height: 1),
-              buildMenuItem(
-                icon: Icons.grid_view_rounded,
-                title: 'Shortcuts',
+              MenuTile(
+                icon: Icons.manage_accounts,
+                title: 'Account Settings',
+                onTap: () => _open(const AccountSettingsScreen()),
               ),
-              const Divider(color: Colors.grey, height: 1),
-              buildMenuItem(
-                icon: Icons.sms_failed_outlined,
-                title: 'Spam SMS Protection',
-              ),
-              const Divider(color: Colors.grey, height: 1),
-              buildMenuItem(
-                icon: Icons.phone_disabled_outlined,
-                title: 'Spam Call Settings',
-              ),
-              const SizedBox(height: 20),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: buildBottomNav(),
     );
   }
+}
 
-  Widget buildTopActionCard({
-    required String title,
-    required String subtitle,
-    required Color titleColor,
-    required bool isIcon,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 18),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade900,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        children: [
-          if (isIcon)
-            Icon(Icons.auto_awesome, color: titleColor, size: 22)
-          else
-            Text(
-              title,
-              style: TextStyle(
-                color: titleColor,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          const SizedBox(height: 6),
-          Text(
-            subtitle,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+class _QuickButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
 
-  Widget buildListCard({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required bool showChevron,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade900,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          buildIconBox(icon),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                    height: 1.3,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          if (showChevron)
-            const Icon(Icons.chevron_right, color: Colors.grey, size: 24),
-        ],
-      ),
-    );
-  }
+  const _QuickButton(
+      {required this.icon, required this.label, required this.onTap});
 
-  Widget buildMenuItem({
-    required IconData icon,
-    required String title,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
-      child: Row(
-        children: [
-          buildIconBox(icon),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Text(
-              title,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          const Icon(Icons.chevron_right, color: Colors.grey, size: 24),
-        ],
-      ),
-    );
-  }
-
-  Widget buildIconBox(IconData icon) {
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        color: Colors.blue.shade800,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Icon(icon, color: Colors.white, size: 20),
-    );
-  }
-
-  Widget buildBottomNav() {
-    return BottomNavigationBar(
-      backgroundColor: Colors.black,
-      type: BottomNavigationBarType.fixed,
-      selectedItemColor: Colors.white,
-      unselectedItemColor: Colors.grey,
-      currentIndex: 3,
-      selectedFontSize: 12,
-      unselectedFontSize: 12,
-      items: [
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.call_outlined),
-          label: 'Home',
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        decoration: BoxDecoration(
+          color: kCard,
+          borderRadius: BorderRadius.circular(16),
         ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.chat_bubble_outline),
-          label: 'Chat',
+        child: Column(
+          children: [
+            Icon(icon, color: kAccent),
+            const SizedBox(height: 6),
+            Text(label,
+                style: const TextStyle(color: Colors.grey, fontSize: 12)),
+          ],
         ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.verified_user_outlined),
-          label: 'Protection',
-        ),
-        BottomNavigationBarItem(
-          icon: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-            decoration: BoxDecoration(
-              color: Colors.blue.shade800,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: const Icon(Icons.menu, color: Colors.white, size: 20),
-          ),
-          label: 'Menu',
-        ),
-      ],
+      ),
     );
   }
 }
