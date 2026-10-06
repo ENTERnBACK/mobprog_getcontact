@@ -124,34 +124,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const SizedBox(height: 16),
 
-              Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                decoration: BoxDecoration(
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Material(
                   color: kCard,
                   borderRadius: BorderRadius.circular(16),
-                ),
-                child: ListTile(
-                  onTap: () => _open(const BirthdayScreen()),
-                  leading: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: kAccent,
-                      borderRadius: BorderRadius.circular(10),
+                  clipBehavior: Clip.antiAlias,
+                  child: ListTile(
+                    onTap: () => _open(const BirthdayScreen()),
+                    leading: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: kAccent,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(Icons.cake, color: Colors.white),
                     ),
-                    child: const Icon(Icons.cake, color: Colors.white),
+                    title: Text(
+                      _birthday == null ? 'Add Your Birthday!' : 'Your Birthday',
+                      style: const TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      _birthday == null
+                          ? 'Add your birthday for celebrations, promotions and special offers.'
+                          : formatDate(DateTime.parse(_birthday!)),
+                      style: const TextStyle(color: Colors.grey),
+                    ),
+                    trailing:
+                        const Icon(Icons.chevron_right, color: Colors.grey),
                   ),
-                  title: Text(
-                    _birthday == null ? 'Add Your Birthday!' : 'Your Birthday',
-                    style: const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(
-                    _birthday == null
-                        ? 'Add your birthday for celebrations, promotions and special offers.'
-                        : formatDate(DateTime.parse(_birthday!)),
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                  trailing: const Icon(Icons.chevron_right, color: Colors.grey),
                 ),
               ),
 
@@ -189,22 +191,22 @@ class _QuickButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
+    return Material(
+      color: kCard,
       borderRadius: BorderRadius.circular(16),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        decoration: BoxDecoration(
-          color: kCard,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          children: [
-            Icon(icon, color: kAccent),
-            const SizedBox(height: 6),
-            Text(label,
-                style: const TextStyle(color: Colors.grey, fontSize: 12)),
-          ],
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          child: Column(
+            children: [
+              Icon(icon, color: kAccent),
+              const SizedBox(height: 6),
+              Text(label,
+                  style: const TextStyle(color: Colors.grey, fontSize: 12)),
+            ],
+          ),
         ),
       ),
     );

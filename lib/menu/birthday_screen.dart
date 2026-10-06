@@ -85,25 +85,26 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
               style: TextStyle(color: Colors.grey),
             ),
             const SizedBox(height: 24),
-            InkWell(
-              onTap: _pickDate,
+                        Material(
+              color: kCard,
               borderRadius: BorderRadius.circular(16),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: kCard,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.calendar_month, color: Colors.white),
-                    const SizedBox(width: 12),
-                    Text(
-                      _date == null ? 'Select date' : formatDate(_date!),
-                      style: const TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                  ],
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(
+                onTap: _pickDate,
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.calendar_month, color: Colors.white),
+                      const SizedBox(width: 12),
+                      Text(
+                        _date == null ? 'Select date' : formatDate(_date!),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
