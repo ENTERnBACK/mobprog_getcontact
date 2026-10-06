@@ -20,7 +20,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/chats': (context) => const ChatScreen(),
         '/menu': (context) => const ProfileScreen(),
-
       },
     );
   }
