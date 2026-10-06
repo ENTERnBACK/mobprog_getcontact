@@ -14,7 +14,6 @@ void showSnack(BuildContext context, String message, {bool error = false}) {
   );
 }
 
-/// Baris menu dengan icon biru di kiri dan panah di kanan.
 class MenuTile extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -59,7 +58,6 @@ class MenuTile extends StatelessWidget {
   }
 }
 
-/// Switch dengan tampilan kartu gelap.
 class SwitchCard extends StatelessWidget {
   final String title;
   final String? subtitle;
