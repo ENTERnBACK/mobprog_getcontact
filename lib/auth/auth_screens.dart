@@ -3,9 +3,12 @@ import 'widgets/auth_button.dart';
 import 'widgets/auth_header.dart';
 import 'widgets/input.dart';
 import 'widgets/password.dart';
+import 'widgets/auth_tabs.dart';
 
 class AuthScreen extends StatefulWidget {
-  const AuthScreen({super.key});
+  final bool isLoginAwal;
+  
+  const AuthScreen({super.key, this.isLoginAwal = true});
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -14,11 +17,16 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   final _idController = TextEditingController();
   final _passController = TextEditingController();
+  final _confirmController = TextEditingController();
+
+
+  late bool _isLogin = widget.isLoginAwal;
 
   @override
   void dispose() {
     _idController.dispose();
     _passController.dispose();
+    _confirmController.dispose();
     super.dispose();
   }
 
@@ -39,7 +47,12 @@ class _AuthScreenState extends State<AuthScreen> {
                 title: 'GetContact',
                 subtitle: 'Temukan dan kelola kontakmu dengan mudah',
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 24),
+              AuthTabs(
+                isLogin: _isLogin,
+                onChanged: (nilai) => setState(() => _isLogin = nilai),
+              ),
+              const SizedBox(height: 24),
               Input(
                 controller: _idController,
                 label: 'Email / No. HP',
@@ -49,9 +62,16 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
               const SizedBox(height: 16),
               Password(controller: _passController),
+              if (!_isLogin) ...[
+                const SizedBox(height: 16),
+                Password(
+                  controller: _confirmController,
+                  label: 'Konfirmasi Password',
+                ),
+              ],
               const SizedBox(height: 28),
               AuthButton(
-                label: 'Lanjut',
+                label: _isLogin ? 'Login' : 'Sign Up',
                 onPressed: () {},
               ),
             ],
