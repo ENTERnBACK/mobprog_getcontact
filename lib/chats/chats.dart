@@ -63,130 +63,14 @@ class ChatScreen extends StatelessWidget {
                 children: [
                   SingleChildScrollView(
                     padding: const EdgeInsets.all(28),
-                    child: Column(
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(28),
-                          decoration: BoxDecoration(
-                            color: kCard,
-                            borderRadius: BorderRadius.circular(28),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(Icons.chat,
-                                  color: Colors.blue, size: 50),
-                              const SizedBox(height: 20),
-                              const Text(
-                                'No active chat',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 27,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 25),
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 45,
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                      color: Colors.blue.shade900,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: const Icon(Icons.add,
-                                        color: Colors.blue, size: 32),
-                                  ),
-                                  const SizedBox(width: 15),
-                                  const Text(
-                                    'You can start using this button.',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 18),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        ValueListenableBuilder<List<Contact>>(
-                          valueListenable: contacts,
-                          builder: (context, list, _) {
-                            if (list.isEmpty) return const SizedBox.shrink();
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 28),
-                              child: Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.all(28),
-                                decoration: BoxDecoration(
-                                  color: kCard,
-                                  borderRadius: BorderRadius.circular(28),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Chat Suggestions',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 20),
-                                    SizedBox(
-                                      height: 90,
-                                      child: ListView.separated(
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: list.length,
-                                        separatorBuilder: (_, __) =>
-                                            const SizedBox(width: 16),
-                                        itemBuilder: (context, i) {
-                                          final c = list[i];
-                                          return GestureDetector(
-                                            onTap: () => Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (_) => ChatRoomScreen(
-                                                  name: c.name,
-                                                  number: c.number,
-                                                ),
-                                              ),
-                                            ),
-                                            child: SizedBox(
-                                              width: 64,
-                                              child: Column(
-                                                children: [
-                                                  AppAvatar(
-                                                      name: c.name, size: 56),
-                                                  const SizedBox(height: 6),
-                                                  Text(
-                                                    c.name,
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
+                    child: ValueListenableBuilder<List<Contact>>(
+                      valueListenable: contacts,
+                      builder: (context, list, _) {
+                        // Belum ada kontak -> No active chat
+                        if (list.isEmpty) return _noActiveChat();
+                        // Sudah ada kontak -> Chat Suggestions
+                        return _suggestions(context, list);
+                      },
                     ),
                   ),
 
@@ -200,6 +84,114 @@ class ChatScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _noActiveChat() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(28),
+      decoration: BoxDecoration(
+        color: kCard,
+        borderRadius: BorderRadius.circular(28),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(Icons.chat, color: Colors.blue, size: 50),
+          const SizedBox(height: 20),
+          const Text(
+            'No active chat',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 27,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 25),
+          Row(
+            children: [
+              Container(
+                width: 45,
+                height: 45,
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade900,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(Icons.add, color: Colors.blue, size: 32),
+              ),
+              const SizedBox(width: 15),
+              const Text(
+                'You can start using this button.',
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _suggestions(BuildContext context, List<Contact> list) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(28),
+      decoration: BoxDecoration(
+        color: kCard,
+        borderRadius: BorderRadius.circular(28),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Chat Suggestions',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            height: 90,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: list.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 16),
+              itemBuilder: (context, i) {
+                final c = list[i];
+                return GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          ChatRoomScreen(name: c.name, number: c.number),
+                    ),
+                  ),
+                  child: SizedBox(
+                    width: 64,
+                    child: Column(
+                      children: [
+                        AppAvatar(name: c.name, size: 56),
+                        const SizedBox(height: 6),
+                        Text(
+                          c.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
