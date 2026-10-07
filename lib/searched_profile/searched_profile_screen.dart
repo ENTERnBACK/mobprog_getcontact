@@ -76,7 +76,7 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
               tags: ['Kurir Paket', 'Tukang Galon', 'Penipu', 'Sales Asuransi', 'Orang Baik'],
             ),
             const SizedBox(height: 24),
-            const PersonalNote(),
+            PersonalNote(phoneNumber: widget.phoneNumber),
             const SizedBox(height: 24),
             const CommentsSection(),
           ],

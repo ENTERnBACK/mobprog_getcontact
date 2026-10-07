@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PersonalNote extends StatefulWidget {
-  const PersonalNote({super.key});
+  final String phoneNumber; 
+
+  const PersonalNote({super.key, required this.phoneNumber});
 
   @override
   State<PersonalNote> createState() => _PersonalNoteState();
 }
 
 class _PersonalNoteState extends State<PersonalNote> {
-  String _noteText = 'Jangan diangkat, biasanya nawarin kartu kredit atau asuransi.';
-  
+  String _noteText = ''; 
   final TextEditingController _noteController = TextEditingController();
+  bool _isLoading = true; 
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNote(); 
+  }
 
   @override
   void dispose() {
@@ -18,7 +27,23 @@ class _PersonalNoteState extends State<PersonalNote> {
     super.dispose();
   }
 
-  // Fungsi dialog edit
+  Future<void> _loadNote() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _noteText = prefs.getString('note_${widget.phoneNumber}') ?? '';
+      _isLoading = false; 
+    });
+  }
+
+  Future<void> _saveNote(String newNote) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('note_${widget.phoneNumber}', newNote);
+    
+    setState(() {
+      _noteText = newNote;
+    });
+  }
+
   void _showEditDialog() {
     _noteController.text = _noteText;
 
@@ -28,7 +53,7 @@ class _PersonalNoteState extends State<PersonalNote> {
         return AlertDialog(
           title: const Text('Edit Catatan'),
           content: TextField(
-            controller: _noteController, 
+            controller: _noteController,
             decoration: const InputDecoration(
               hintText: 'Tulis catatan untuk nomor ini...',
               border: OutlineInputBorder(),
@@ -42,9 +67,7 @@ class _PersonalNoteState extends State<PersonalNote> {
             ),
             ElevatedButton(
               onPressed: () {
-                setState(() {
-                  _noteText = _noteController.text;
-                });
+                _saveNote(_noteController.text);
                 Navigator.pop(context);
               },
               child: const Text('Simpan'),
@@ -54,7 +77,7 @@ class _PersonalNoteState extends State<PersonalNote> {
       },
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -85,7 +108,7 @@ class _PersonalNoteState extends State<PersonalNote> {
                 ],
               ),
               IconButton(
-                constraints: const BoxConstraints(), 
+                constraints: const BoxConstraints(),
                 padding: EdgeInsets.zero,
                 icon: Icon(Icons.edit, size: 20, color: Colors.amber.shade800),
                 onPressed: _showEditDialog,
@@ -93,14 +116,20 @@ class _PersonalNoteState extends State<PersonalNote> {
             ],
           ),
           const SizedBox(height: 12),
-          Text(
-            _noteText.isEmpty ? 'Belum ada catatan. Tambahkan sekarang.' : _noteText,
-            style: TextStyle(
-              color: _noteText.isEmpty ? Colors.grey : Colors.black87, 
-              height: 1.4,
-              fontStyle: _noteText.isEmpty ? FontStyle.italic : FontStyle.normal,
-            ),
-          ),
+          _isLoading
+              ? const SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : Text(
+                  _noteText.isEmpty ? 'Belum ada catatan. Tambahkan sekarang.' : _noteText,
+                  style: TextStyle(
+                    color: _noteText.isEmpty ? Colors.grey : Colors.black87,
+                    height: 1.4,
+                    fontStyle: _noteText.isEmpty ? FontStyle.italic : FontStyle.normal,
+                  ),
+                ),
         ],
       ),
     );
