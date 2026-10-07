@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../chats/chats.dart'; // ChatScreen (Marsyha)
+import '../home/searchbar.dart';
 import '../profile.dart';
 import 'protection_screen.dart';
 import 'widgets/menu_bottom_nav.dart';
@@ -23,7 +24,7 @@ class _MenuShellState extends State<MenuShell> {
 
   // Harus berisi tepat 4 halaman, urutannya = urutan tab.
   static const List<Widget> _pages = [
-    _HomePlaceholder(), // 0 Home  -> GANTI dengan HomeScreen() milik Amelia
+    ContactSearchPage(), // 0 Home  -> GANTI dengan HomeScreen() milik Amelia
     ChatScreen(), //        1 Chat  (Marsyha)
     ProtectionScreen(), //  2 Protection (Elizabeth)
     ProfileScreen(), //     3 Menu (Elizabeth)
@@ -45,26 +46,3 @@ class _MenuShellState extends State<MenuShell> {
 }
 
 /// Pengganti sementara sampai halaman Home (Amelia) tersambung.
-class _HomePlaceholder extends StatelessWidget {
-  const _HomePlaceholder();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: kBg,
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.phone_outlined, size: 56, color: Colors.grey),
-            SizedBox(height: 12),
-            Text('Home', style: TextStyle(color: Colors.white, fontSize: 18)),
-            SizedBox(height: 4),
-            Text('Halaman Home (Amelia) belum tersambung',
-                style: TextStyle(color: Colors.grey, fontSize: 12)),
-          ],
-        ),
-      ),
-    );
-  }
-}
