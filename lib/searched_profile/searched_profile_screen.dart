@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'widgets/profile_summary.dart';
+import 'widgets/tags_section.dart';
 
 class SearchedProfileScreen extends StatelessWidget {
   final String phoneNumber;
@@ -29,7 +30,9 @@ class SearchedProfileScreen extends StatelessWidget {
             const SizedBox(height: 24),
             
             const SizedBox(height: 24),
-
+            const TagsSection(
+              tags: ['Kurir Paket', 'Tukang Galon', 'Penipu', 'Sales Asuransi', 'Orang Baik'],
+            ),
             
             const SizedBox(height: 24),
             
