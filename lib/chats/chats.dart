@@ -171,7 +171,7 @@ class ChatScreen extends StatelessWidget {
   Widget _chatList(
     BuildContext context,
     List<Contact> chats,
-    Map<String, List<String>> history,
+    Map<String, List<Message>> history,
   ) {
     return Container(
       width: double.infinity,
@@ -195,10 +195,14 @@ class ChatScreen extends StatelessWidget {
                 ),
               ),
               subtitle: Text(
-                history[c.number]!.last,
+                history[c.number]!.last.text,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(color: Colors.grey.shade400, fontSize: 14),
+              ),
+              trailing: Text(
+                formatTime(history[c.number]!.last.time),
+                style: TextStyle(color: Colors.grey.shade400, fontSize: 12),
               ),
               onTap: () => _openRoom(context, c),
             ),
