@@ -64,29 +64,55 @@ class ChatScreen extends StatelessWidget {
                   SingleChildScrollView(
                     padding: const EdgeInsets.all(28),
                     child: AnimatedBuilder(
-                      animation: Listenable.merge([contacts, chatHistory]),
+                      animation:
+                          Listenable.merge([contacts, groups, chatHistory]),
                       builder: (context, _) {
                         final all = contacts.value;
+                        final groupList = groups.value;
                         final history = chatHistory.value;
 
-                        if (all.isEmpty) return _noActiveChat();
+                        if (all.isEmpty && groupList.isEmpty) {
+                          return _noActiveChat();
+                        }
 
-                        final chats = <Contact>[];
-                        for (final n in history.keys.toList().reversed) {
-                          final i = all.indexWhere((c) => c.number == n);
-                          if (i != -1 && history[n]!.isNotEmpty) {
-                            chats.add(all[i]);
+                        final entries = <_ChatEntry>[];
+                        for (final key in history.keys.toList().reversed) {
+                          final msgs = history[key]!;
+                          if (msgs.isEmpty) continue;
+
+                          final ci = all.indexWhere((c) => c.number == key);
+                          if (ci != -1) {
+                            entries.add(_ChatEntry(
+                              title: all[ci].name,
+                              id: key,
+                              last: msgs.last,
+                            ));
+                            continue;
+                          }
+
+                          final gi = groupList.indexWhere((g) => g.id == key);
+                          if (gi != -1) {
+                            entries.add(_ChatEntry(
+                              title: groupList[gi].name,
+                              id: key,
+                              last: msgs.last,
+                              subtitle:
+                                  '${groupList[gi].members.length} members',
+                              isGroup: true,
+                            ));
                           }
                         }
 
-                        final suggestions =
-                            all.where((c) => !chats.contains(c)).toList();
+                        final chatted = entries.map((e) => e.id).toSet();
+                        final suggestions = all
+                            .where((c) => !chatted.contains(c.number))
+                            .toList();
 
                         return Column(
                           children: [
-                            if (chats.isNotEmpty)
-                              _chatList(context, chats, history),
-                            if (chats.isNotEmpty && suggestions.isNotEmpty)
+                            if (entries.isNotEmpty)
+                              _chatList(context, entries),
+                            if (entries.isNotEmpty && suggestions.isNotEmpty)
                               const SizedBox(height: 28),
                             if (suggestions.isNotEmpty)
                               _suggestions(context, suggestions),
@@ -110,7 +136,20 @@ class ChatScreen extends StatelessWidget {
     );
   }
 
-  void _openRoom(BuildContext context, Contact c) {
+  void _openEntry(BuildContext context, _ChatEntry e) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ChatRoomScreen(
+          name: e.title,
+          number: e.id,
+          subtitle: e.subtitle,
+        ),
+      ),
+    );
+  }
+
+  void _openContact(BuildContext context, Contact c) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -164,11 +203,7 @@ class ChatScreen extends StatelessWidget {
     );
   }
 
-  Widget _chatList(
-    BuildContext context,
-    List<Contact> chats,
-    Map<String, List<Message>> history,
-  ) {
+  Widget _chatList(BuildContext context, List<_ChatEntry> entries) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 12),
@@ -178,12 +213,23 @@ class ChatScreen extends StatelessWidget {
       ),
       child: Column(
         children: [
-          for (final c in chats)
+          for (final e in entries)
             ListTile(
               contentPadding: const EdgeInsets.symmetric(horizontal: 24),
-              leading: AppAvatar(name: c.name, size: 52),
+              leading: e.isGroup
+                  ? Container(
+                      width: 52,
+                      height: 52,
+                      decoration: BoxDecoration(
+                        color: Colors.blue.shade900,
+                        shape: BoxShape.circle,
+                      ),
+                      child:
+                          const Icon(Icons.group, color: Colors.blue, size: 26),
+                    )
+                  : AppAvatar(name: e.title, size: 52),
               title: Text(
-                c.name,
+                e.title,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -191,16 +237,16 @@ class ChatScreen extends StatelessWidget {
                 ),
               ),
               subtitle: Text(
-                history[c.number]!.last.text,
+                e.last.text,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(color: Colors.grey.shade400, fontSize: 14),
               ),
               trailing: Text(
-                formatTime(history[c.number]!.last.time),
+                formatTime(e.last.time),
                 style: TextStyle(color: Colors.grey.shade400, fontSize: 12),
               ),
-              onTap: () => _openRoom(context, c),
+              onTap: () => _openEntry(context, e),
             ),
         ],
       ),
@@ -236,7 +282,7 @@ class ChatScreen extends StatelessWidget {
               itemBuilder: (context, i) {
                 final c = list[i];
                 return GestureDetector(
-                  onTap: () => _openRoom(context, c),
+                  onTap: () => _openContact(context, c),
                   child: SizedBox(
                     width: 64,
                     child: Column(
@@ -263,6 +309,21 @@ class ChatScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+class _ChatEntry {
+  final String title;
+  final String id;
+  final Message last;
+  final String? subtitle;
+  final bool isGroup;
+  const _ChatEntry({
+    required this.title,
+    required this.id,
+    required this.last,
+    this.subtitle,
+    this.isGroup = false,
+  });
 }
 
 class AddChatButton extends StatelessWidget {
