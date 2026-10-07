@@ -13,7 +13,7 @@ class NewGroupScreen extends StatefulWidget {
 
 class _NewGroupScreenState extends State<NewGroupScreen> {
   final _name = TextEditingController();
-  final Set<String> _selected = {};
+  final Set<String> _selected = {}; 
 
   @override
   void dispose() {
@@ -41,13 +41,19 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
       return;
     }
 
+    final id = 'group_${DateTime.now().millisecondsSinceEpoch}';
+    groups.value = [
+      ...groups.value,
+      Group(id: id, name: name, members: _selected.toList()),
+    ];
+
     final nav = Navigator.of(context);
     nav.popUntil((route) => route.isFirst);
     nav.push(
       MaterialPageRoute(
         builder: (_) => ChatRoomScreen(
           name: name,
-          number: 'group_${DateTime.now().millisecondsSinceEpoch}',
+          number: id,
           subtitle: '${_selected.length} members',
         ),
       ),
@@ -82,6 +88,7 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
               ),
             ),
 
+            // Nama grup
             Padding(
               padding: const EdgeInsets.fromLTRB(28, 24, 28, 8),
               child: TextField(
@@ -122,6 +129,7 @@ class _NewGroupScreenState extends State<NewGroupScreen> {
               ),
             ),
 
+            // Daftar kontak
             Expanded(
               child: list.isEmpty
                   ? Center(
