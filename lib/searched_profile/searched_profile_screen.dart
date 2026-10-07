@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'widgets/profile_summary.dart';
 import 'widgets/tags_section.dart';
@@ -20,6 +21,28 @@ class SearchedProfileScreen extends StatefulWidget {
 
 class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
   bool _isSaved = false;
+  bool _isBlocked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBlockStatus();
+  }
+
+  Future<void> _loadBlockStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isBlocked = prefs.getBool('blocked_${widget.phoneNumber}') ?? false;
+    });
+  }
+
+  Future<void> _toggleBlock() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isBlocked = !_isBlocked;
+    });
+    await prefs.setBool('blocked_${widget.phoneNumber}', _isBlocked);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +112,24 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
               Share.share(shareText);
             },
           ),
+          // Tombol Block/Unblock
+          IconButton(
+            icon: Icon(
+              _isBlocked ? Icons.block : Icons.block_outlined,
+              color: _isBlocked ? Colors.redAccent : Colors.grey.shade700,
+            ),
+            tooltip: _isBlocked ? 'Unblock' : 'Block Contact',
+            onPressed: () {
+              _toggleBlock(); 
+              
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(_isBlocked ? 'Contact successfully unblocked' : 'Contact has been blocked'),
+                  duration: const Duration(seconds: 2),
+                ),
+              );
+            },
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -104,6 +145,7 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
             MessageAction(
               contactName: widget.contactName,
               phoneNumber: widget.phoneNumber,
+              isBlocked: _isBlocked,
             ),
             RatingSection(
               phoneNumber: widget.phoneNumber,
