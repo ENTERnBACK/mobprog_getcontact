@@ -6,6 +6,7 @@ import 'widgets/tags_section.dart';
 import 'widgets/message_action.dart';
 import 'widgets/personal_note.dart';
 import 'widgets/comments_section.dart';
+import 'widgets/rating_section.dart';
 
 class SearchedProfileScreen extends StatefulWidget {
   final String phoneNumber;
@@ -24,6 +25,8 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
   Widget build(BuildContext context) {
     List<Map<String, String>> dynamicComments = [];
     List<String> dynamicTags = [];
+    double dynamicRating = 0.0;
+    int dynamicReviews = 0;
 
     if (widget.contactName.toLowerCase() == 'budi') {
       dynamicComments = [
@@ -31,16 +34,22 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
         {'name': 'Anonim', 'text': 'Sering ngutang di kantin.'},
       ];
       dynamicTags = ['Teman Kampus', 'Tukang Ngutang'];
+      dynamicRating = 4.2;
+      dynamicReviews = 15;
     } else if (widget.contactName.toLowerCase() == 'caca') {
       dynamicComments = [
         {'name': 'Siti', 'text': 'Ini nomor Caca yang jualan kue.'},
       ];
       dynamicTags = ['Jualan Kue', 'Teman SMP'];
+      dynamicRating = 4.8;
+      dynamicReviews = 32;
     } else {
       dynamicComments = [
         {'name': 'Sistem', 'text': 'No comments available for this number.'},
       ];
-      dynamicTags = ['Baru Dikenal'];
+      dynamicTags = ['New Contact'];
+      dynamicRating = 0.0;
+      dynamicReviews = 0;
     }
 
     return Scaffold(
@@ -75,7 +84,7 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
           IconButton(
             icon: const Icon(Icons.share_outlined),
             onPressed: () {
-              final String shareText = 'Check out this number: ${widget.phoneNumber} on our app!';
+              final String shareText = 'Check out this profile: ${widget.contactName} with the number ${widget.phoneNumber} on our app!';
               
               Share.share(shareText);
             },
@@ -96,6 +105,12 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
               contactName: widget.contactName,
               phoneNumber: widget.phoneNumber,
             ),
+            RatingSection(
+              phoneNumber: widget.phoneNumber,
+              baseRating: dynamicRating,
+              baseReviews: dynamicReviews,
+            ),
+            const SizedBox(height: 24),
             const SizedBox(height: 24),
             TagsSection(
               phoneNumber: widget.phoneNumber,
