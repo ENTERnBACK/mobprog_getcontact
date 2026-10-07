@@ -6,6 +6,7 @@ class Input extends StatelessWidget {
   final String hint; 
   final IconData icon; 
   final TextInputType keyboardType; 
+  final String? Function(String?)? validator; 
 
   const Input({
     super.key,
@@ -14,13 +15,15 @@ class Input extends StatelessWidget {
     required this.hint,
     required this.icon,
     this.keyboardType = TextInputType.text,
+    this.validator,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
+      validator: validator,
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
