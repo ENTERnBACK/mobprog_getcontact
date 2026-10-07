@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'chat_room_screen.dart';
 import 'contact_form_screen.dart';
+import 'contact_store.dart';
 import 'widget/common.dart';
 
 class NewChatScreen extends StatelessWidget {
@@ -28,6 +30,66 @@ class NewChatScreen extends StatelessWidget {
               () => Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => const ContactFormScreen()),
+              ),
+            ),
+
+            Expanded(
+              child: ValueListenableBuilder<List<Contact>>(
+                valueListenable: contacts,
+                builder: (context, list, _) {
+                  if (list.isEmpty) return const SizedBox.shrink();
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 10),
+                      Container(height: 24, color: const Color(0xFF0C0C0E)),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(28, 24, 28, 12),
+                        child: Text(
+                          'Getcontact Contacts',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: list.length,
+                          itemBuilder: (context, i) {
+                            final c = list[i];
+                            return ListTile(
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 28),
+                              leading: AppAvatar(name: c.name, size: 56),
+                              title: Text(
+                                c.name,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
+                              subtitle: Text(
+                                c.number,
+                                style: TextStyle(
+                                    color: Colors.grey.shade400,
+                                    fontSize: 15),
+                              ),
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => ChatRoomScreen(
+                                    name: c.name,
+                                    number: c.number,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ],
