@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import 'chat_room_screen.dart';
+import 'contact_store.dart';
 import 'new_chat_screen.dart';
 import 'widget/common.dart';
 
@@ -12,7 +15,6 @@ class ChatScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // Header
             Container(
               height: 75,
               decoration: const BoxDecoration(
@@ -24,7 +26,6 @@ class ChatScreen extends StatelessWidget {
                 children: [
                   const SizedBox(width: 20),
 
-                  // Search button
                   Container(
                     width: 62,
                     height: 55,
@@ -57,7 +58,6 @@ class ChatScreen extends StatelessWidget {
               ),
             ),
 
-            // Content
             Expanded(
               child: Stack(
                 children: [
@@ -65,7 +65,6 @@ class ChatScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(28),
                     child: Column(
                       children: [
-                        // No active chat
                         Container(
                           width: double.infinity,
                           padding: const EdgeInsets.all(28),
@@ -112,34 +111,85 @@ class ChatScreen extends StatelessWidget {
                           ),
                         ),
 
-                        const SizedBox(height: 28),
-
-                        // Chat Suggestions
-                        Container(
-                          width: double.infinity,
-                          height: 180,
-                          padding: const EdgeInsets.all(28),
-                          decoration: BoxDecoration(
-                            color: kCard,
-                            borderRadius: BorderRadius.circular(28),
-                          ),
-                          child: const Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              'Chat Suggestions',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
+                        ValueListenableBuilder<List<Contact>>(
+                          valueListenable: contacts,
+                          builder: (context, list, _) {
+                            if (list.isEmpty) return const SizedBox.shrink();
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 28),
+                              child: Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(28),
+                                decoration: BoxDecoration(
+                                  color: kCard,
+                                  borderRadius: BorderRadius.circular(28),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Chat Suggestions',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    SizedBox(
+                                      height: 90,
+                                      child: ListView.separated(
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: list.length,
+                                        separatorBuilder: (_, __) =>
+                                            const SizedBox(width: 16),
+                                        itemBuilder: (context, i) {
+                                          final c = list[i];
+                                          return GestureDetector(
+                                            onTap: () => Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) => ChatRoomScreen(
+                                                  name: c.name,
+                                                  number: c.number,
+                                                ),
+                                              ),
+                                            ),
+                                            child: SizedBox(
+                                              width: 64,
+                                              child: Column(
+                                                children: [
+                                                  AppAvatar(
+                                                      name: c.name, size: 56),
+                                                  const SizedBox(height: 6),
+                                                  Text(
+                                                    c.name,
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ),
+                            );
+                          },
                         ),
                       ],
                     ),
                   ),
 
-                  // 2. Add Button
                   const Positioned(
                     right: 28,
                     bottom: 25,
@@ -148,47 +198,13 @@ class ChatScreen extends StatelessWidget {
                 ],
               ),
             ),
-
-            // Bottom Navigation
-            Container(
-              height: 90,
-              decoration: const BoxDecoration(color: kCard),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _bottomItem(Icons.phone, 'Home', false),
-                  _bottomItem(Icons.chat_bubble, 'Chat', true),
-                  _bottomItem(Icons.shield, 'Protection', false),
-                  _bottomItem(Icons.menu, 'Menu', false),
-                ],
-              ),
-            ),
           ],
         ),
       ),
     );
   }
-
-  static Widget _bottomItem(IconData icon, String title, bool selected) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, color: selected ? Colors.blue : Colors.grey, size: 28),
-        const SizedBox(height: 5),
-        Text(
-          title,
-          style: TextStyle(
-            color: selected ? Colors.blue : Colors.grey,
-            fontSize: 13,
-          ),
-        ),
-      ],
-    );
-  }
 }
 
-// 2. ADD BUTTON  -> buka New Chat
-// ─────────────────────────────────────────────
 class AddChatButton extends StatelessWidget {
   const AddChatButton({super.key});
 
