@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'searchbar.dart'; // Import file search bar yang sudah dibuat
+import 'searchbar.dart'; 
+import 'profile.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,9 +16,8 @@ class MyApp extends StatelessWidget {
       title: 'GetContact',
       theme: ThemeData(
         // Perbaikan: tambahkan ColorScheme.fromSeed
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      // Ganti halaman utama langsung ke ContactSearchPage
       home: const ContactSearchPage(),
     );
   }
