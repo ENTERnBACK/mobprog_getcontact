@@ -22,6 +22,27 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<Map<String, String>> dynamicComments = [];
+    List<String> dynamicTags = [];
+
+    if (widget.contactName.toLowerCase() == 'budi') {
+      dynamicComments = [
+        {'name': 'Andi', 'text': 'Oh ini nomor Budi temen kampus.'},
+        {'name': 'Anonim', 'text': 'Sering ngutang di kantin.'},
+      ];
+      dynamicTags = ['Teman Kampus', 'Tukang Ngutang'];
+    } else if (widget.contactName.toLowerCase() == 'caca') {
+      dynamicComments = [
+        {'name': 'Siti', 'text': 'Ini nomor Caca yang jualan kue.'},
+      ];
+      dynamicTags = ['Jualan Kue', 'Teman SMP'];
+    } else {
+      dynamicComments = [
+        {'name': 'Sistem', 'text': 'Belum ada komentar untuk nomor ini.'},
+      ];
+      dynamicTags = ['Baru Dikenal'];
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -76,13 +97,16 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
               phoneNumber: widget.phoneNumber,
             ),
             const SizedBox(height: 24),
-            const TagsSection(
-              tags: ['Kurir Paket', 'Tukang Galon', 'Penipu', 'Sales Asuransi', 'Orang Baik'],
+            TagsSection(
+              phoneNumber: widget.phoneNumber,
+              initialTags: dynamicTags,
             ),
             const SizedBox(height: 24),
             PersonalNote(phoneNumber: widget.phoneNumber),
             const SizedBox(height: 24),
-            const CommentsSection(),
+            CommentsSection(
+              comments: dynamicComments,
+            ),
           ],
         ),
       ),

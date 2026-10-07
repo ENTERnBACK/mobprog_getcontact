@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CommentsSection extends StatelessWidget {
-  final List<Map<String, String>> comments = const [
-    {'name': 'Budi Santoso', 'text': 'Sering nelepon pagi-pagi nawarin pinjol. Blokir aja!'},
-    {'name': 'Siti Aisyah', 'text': 'Ini nomor kurir JNT langganan daerah Sudirman.'},
-    {'name': 'Anonim', 'text': 'Tukang tipu berkedok hadiah undian.'},
-  ];
+  final List<Map<String, String>> comments;
 
-  const CommentsSection({super.key});
+  const CommentsSection({super.key, required this.comments});
 
   @override
   Widget build(BuildContext context) {
