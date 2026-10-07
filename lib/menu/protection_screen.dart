@@ -97,9 +97,9 @@ class _ProtectionScreenState extends State<ProtectionScreen> {
         Navigator.pushNamed(context, '/chats');
         break;
       case 2:
-        break; // sudah di Protection
+        break;
       case 3:
-        Navigator.pop(context); // kembali ke halaman Menu
+        Navigator.pop(context);
         break;
     }
   }
