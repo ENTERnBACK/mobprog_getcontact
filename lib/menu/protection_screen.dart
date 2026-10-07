@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../services/menu_storage_service.dart';
+import 'widgets/menu_bottom_nav.dart';
 import 'widgets/menu_helpers.dart';
 
 class ProtectionScreen extends StatefulWidget {
@@ -40,10 +41,27 @@ class _ProtectionScreenState extends State<ProtectionScreen> {
     });
   }
 
+  void _onNavTap(int index) {
+    switch (index) {
+      case 0:
+        showSnack(context, 'Halaman Home belum tersambung');
+        break;
+      case 1:
+        Navigator.pushNamed(context, '/chats');
+        break;
+      case 2:
+        break; // sudah di Protection
+      case 3:
+        Navigator.pop(context); // kembali ke halaman Menu
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBg,
+      bottomNavigationBar: MenuBottomNav(currentIndex: 2, onTap: _onNavTap),
       appBar: AppBar(
         backgroundColor: kBg,
         foregroundColor: Colors.white,
