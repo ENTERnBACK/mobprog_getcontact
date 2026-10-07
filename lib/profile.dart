@@ -1,4 +1,3 @@
-// File: lib/profile.dart  (halaman Menu / Settings - Elizabeth)
 import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
