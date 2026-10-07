@@ -4,10 +4,34 @@ import 'chat_room_screen.dart';
 import 'contact_form_screen.dart';
 import 'contact_store.dart';
 import 'new_group_screen.dart';
+import 'search_screen.dart';
 import 'widget/common.dart';
 
 class NewChatScreen extends StatelessWidget {
   const NewChatScreen({super.key});
+
+  List<SearchItem> _items() {
+    return [
+      ...contacts.value.map(
+        (c) => SearchItem(
+          title: c.name,
+          subtitle: c.number,
+          id: c.number,
+          keywords: '${c.name} ${c.number}',
+        ),
+      ),
+      ...groups.value.map(
+        (g) => SearchItem(
+          title: g.name,
+          subtitle: '${g.members.length} members',
+          id: g.id,
+          isGroup: true,
+          roomSubtitle: '${g.members.length} members',
+          keywords: g.name,
+        ),
+      ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,11 +40,23 @@ class NewChatScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const AppHeader(
+            AppHeader(
               title: 'New Chat',
               trailing: Padding(
-                padding: EdgeInsets.only(right: 24),
-                child: Icon(Icons.search, color: Colors.white, size: 30),
+                padding: const EdgeInsets.only(right: 24),
+                child: GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => SearchScreen(
+                        items: _items(),
+                        hint: 'Search contacts or groups',
+                      ),
+                    ),
+                  ),
+                  child: const Icon(Icons.search,
+                      color: Colors.white, size: 30),
+                ),
               ),
             ),
             const SizedBox(height: 10),
