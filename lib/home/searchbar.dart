@@ -10,6 +10,7 @@ class ContactSearchPage extends StatefulWidget {
 
 class _ContactSearchPageState extends State<ContactSearchPage> {
   List<Contact> filteredContacts = [];
+  bool isSearching = false;
 
 // DUMMY RECENT SEARCHES
 final List<Contact> recentContacts = [
@@ -30,23 +31,24 @@ final List<Contact> recentContacts = [
   // SEARCH CONTACT
   // =========================
   void _runFilter(String keyword) {
-    List<Contact> results;
+  List<Contact> results;
 
-    if (keyword.isEmpty) {
-      results = contacts;
-    } else {
-      results = contacts.where((contact) {
-        return contact.name
-                .toLowerCase()
-                .contains(keyword.toLowerCase()) ||
-            contact.phone.contains(keyword);
-      }).toList();
-    }
-
-    setState(() {
-      filteredContacts = results;
-    });
+  if (keyword.isEmpty) {
+    results = [];
+  } else {
+    results = contacts.where((contact) {
+      return contact.name
+              .toLowerCase()
+              .contains(keyword.toLowerCase()) ||
+          contact.phone.contains(keyword);
+    }).toList();
   }
+
+  setState(() {
+    filteredContacts = results;
+    isSearching = keyword.isNotEmpty;
+  });
+}
 
   @override
   Widget build(BuildContext context) {
@@ -208,103 +210,134 @@ final List<Contact> recentContacts = [
 
             const SizedBox(height: 30),
 
-            // =========================
-            // RECENT SEARCHES
-            // =========================
-            const Text(
-              'Recent Searches',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 19,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+    // =========================
+    // RECENT SEARCHES
+    // =========================
+  const Text(
+  'Recent Searches',
+  style: TextStyle(
+    color: Colors.white,
+    fontSize: 19,
+    fontWeight: FontWeight.bold,
+  ),
+),
 
-            const SizedBox(height: 15),
+const SizedBox(height: 15),
 
-            // =========================
-            // HASIL KONTAK
-            // =========================
-            Expanded(
-              child: filteredContacts.isNotEmpty
-                  ? ListView.builder(
-                      itemCount: filteredContacts.length,
-                      itemBuilder: (context, index) {
-                        final contact = filteredContacts[index];
+Expanded(
+  child: isSearching
+      ? filteredContacts.isNotEmpty
+          ? ListView.builder(
+              itemCount: filteredContacts.length,
+              itemBuilder: (context, index) {
+                final contact = filteredContacts[index];
 
-                        return Container(
-                          margin: const EdgeInsets.only(
-                            bottom: 12,
-                          ),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF1E1E1E),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: ListTile(
-                            contentPadding:
-                                const EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 5,
-                            ),
-
-                            // FOTO / ICON KONTAK
-                            leading: const CircleAvatar(
-                              radius: 25,
-                              backgroundColor: Color(0xFF333333),
-                              child: Icon(
-                                Icons.person,
-                                color: Colors.white,
-                              ),
-                            ),
-
-                            // NAMA
-                            title: Text(
-                              contact.name,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-
-                            // NOMOR
-                            subtitle: Text(
-                              contact.phone,
-                              style: const TextStyle(
-                                color: Colors.grey,
-                              ),
-                            ),
-
-                            // PANAH
-                            trailing: const Icon(
-                              Icons.arrow_forward_ios,
-                              size: 16,
-                              color: Colors.grey,
-                            ),
-
-                            onTap: () {},
-                          ),
-                        );
-                      },
-                    )
-                  : const Center(
-                      child: Text(
-                        'Kontak tidak ditemukan',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
-                        ),
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1E1E1E),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                      vertical: 5,
+                    ),
+                    leading: const CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Color(0xFF333333),
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.white,
                       ),
                     ),
-            ),
-          ],
+                    title: Text(
+                      contact.name,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    subtitle: Text(
+                      contact.phone,
+                      style: const TextStyle(
+                        color: Colors.grey,
+                      ),
+                    ),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
+                );
+              },
+            )
+          : const Center(
+              child: Text(
+                'Kontak tidak ditemukan',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 16,
+                ),
+              ),
+            )
+      : ListView.builder(
+          itemCount: recentContacts.length,
+          itemBuilder: (context, index) {
+            final contact = recentContacts[index];
+
+            return Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1E1E1E),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: ListTile(
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 5,
+                ),
+                leading: const CircleAvatar(
+                  radius: 25,
+                  backgroundColor: Color(0xFF333333),
+                  child: Icon(
+                    Icons.person,
+                    color: Colors.white,
+                  ),
+                ),
+                title: Text(
+                  contact.name,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                subtitle: Text(
+                  contact.phone,
+                  style: const TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+                trailing: const Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: Colors.grey,
+                ),
+              ),
+            );
+          },
+        ),
+),
+
+    ],
         ),
       ),
     );
   }
 }
-
-
 // ======================================================
 // HALAMAN SEMUA CONTACTS
 // ======================================================
