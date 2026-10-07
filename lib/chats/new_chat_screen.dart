@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'contact_form_screen.dart';
 import 'widget/common.dart';
 
@@ -12,9 +13,9 @@ class NewChatScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            AppHeader(
+            const AppHeader(
               title: 'New Chat',
-              trailing: const Padding(
+              trailing: Padding(
                 padding: EdgeInsets.only(right: 24),
                 child: Icon(Icons.search, color: Colors.white, size: 30),
               ),
@@ -29,26 +30,6 @@ class NewChatScreen extends StatelessWidget {
                 MaterialPageRoute(builder: (_) => const ContactFormScreen()),
               ),
             ),
-            _actionRow(Icons.mail, 'Invite to Getcontact', () {}),
-            const SizedBox(height: 10),
-            Container(height: 24, color: const Color(0xFF0C0C0E)),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(28, 24, 28, 12),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Getcontact Contacts',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            _contactTile('Bu Amelia sk', '+62 878-7865-2863'),
-            _contactTile('Bu maretha SK', '+62 815-9954-099'),
-            _contactTile('aca', '+62 881-8003-442'),
           ],
         ),
       ),
@@ -77,17 +58,6 @@ class NewChatScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  static Widget _contactTile(String name, String number) {
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 28),
-      leading: AppAvatar(name: name, size: 56),
-      title: Text(name,
-          style: const TextStyle(color: Colors.white, fontSize: 18)),
-      subtitle: Text(number,
-          style: TextStyle(color: Colors.grey.shade400, fontSize: 15)),
     );
   }
 }
