@@ -14,17 +14,16 @@ class ChatRoomScreen extends StatefulWidget {
 
 class _ChatRoomScreenState extends State<ChatRoomScreen> {
   final _msg = TextEditingController();
-  late final List<String> _messages =
+  late final List<Message> _messages =
       List.of(chatHistory.value[widget.number] ?? []);
 
   void _send() {
     final t = _msg.text.trim();
     if (t.isEmpty) return;
-    setState(() => _messages.add(t));
+    setState(() => _messages.add(Message(text: t, time: DateTime.now())));
     _msg.clear();
 
-    // Simpan ke riwayat, dan pindahkan chat ini jadi yang terbaru
-    final history = Map<String, List<String>>.of(chatHistory.value);
+    final history = Map<String, List<Message>>.of(chatHistory.value);
     history.remove(widget.number);
     history[widget.number] = List.of(_messages);
     chatHistory.value = history;
@@ -43,7 +42,6 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Header profil
             Container(
               height: 75,
               decoration: const BoxDecoration(
@@ -86,7 +84,6 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               child: ListView(
                 padding: const EdgeInsets.all(28),
                 children: [
-                  // Kartu profil tersimpan
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(28),
@@ -124,22 +121,31 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                       alignment: Alignment.centerRight,
                       child: Container(
                         margin: const EdgeInsets.only(bottom: 10),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 18, vertical: 12),
+                        padding: const EdgeInsets.fromLTRB(18, 12, 14, 8),
                         decoration: BoxDecoration(
                           color: Colors.blue.shade900,
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: Text(m,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 17)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(m.text,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 17)),
+                            const SizedBox(height: 4),
+                            Text(
+                              formatTime(m.time),
+                              style: TextStyle(
+                                  color: Colors.grey.shade400, fontSize: 11),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                 ],
               ),
             ),
 
-            // Input pesan
             Container(
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
               decoration: const BoxDecoration(color: kCard),
