@@ -17,7 +17,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'GetContact',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const WelcomeScreen(),
+      // TES LOKAL: kembalikan ke WelcomeScreen() sebelum commit!
+      home: const MenuShell(initialIndex: 1),
       routes: {
         '/chats': (context) => const ChatScreen(),
         '/menu': (context) => const MenuShell(),
