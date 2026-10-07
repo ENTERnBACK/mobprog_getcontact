@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'searchbar.dart'; 
 import 'profile.dart';
-import 'login.dart';
+import 'auth/login.dart';
 import 'chats/chats.dart';
 import 'menu/main_shell.dart';
 
@@ -16,8 +16,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'GetContact',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const  MenuShell(),
+
+      theme: ThemeData(useMaterial3: true, colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+      ),
+      home: const WelcomeScreen(),
       routes: {
         '/chats': (context) => const ChatScreen(),
         '/menu': (context) => const MenuShell(),

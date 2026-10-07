@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import '../../chats/chat_room_screen.dart';
 
 class MessageAction extends StatelessWidget {
-  const MessageAction({super.key});
+  final String contactName;
+  final String phoneNumber;
+  
+  const MessageAction({super.key, required this.contactName, required this.phoneNumber});
 
   @override
   Widget build(BuildContext context) {
@@ -9,11 +13,19 @@ class MessageAction extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton.icon(
         onPressed: () {
-          Navigator.pushNamed(context, '/chats');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ChatRoomScreen(
+                name: contactName,
+                number: phoneNumber,
+              ),
+            ),
+          );
         },
         icon: const Icon(Icons.chat_bubble_outline),
         label: const Text(
-          'Kirim Pesan',
+          'Send Message',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         style: ElevatedButton.styleFrom(
