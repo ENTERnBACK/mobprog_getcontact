@@ -9,8 +9,9 @@ import 'widgets/comments_section.dart';
 
 class SearchedProfileScreen extends StatefulWidget {
   final String phoneNumber;
+  final String contactName;
 
-  const SearchedProfileScreen({super.key, required this.phoneNumber});
+  const SearchedProfileScreen({super.key, required this.phoneNumber, required this.contactName});
 
   @override
   State<SearchedProfileScreen> createState() => _SearchedProfileScreenState();
@@ -67,10 +68,13 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
           children: [
             ProfileSummary(
               phoneNumber: widget.phoneNumber, 
-              primaryName: 'Kurir Paket JNT',
+              primaryName: widget.contactName,
             ),
             const SizedBox(height: 24),
-            const MessageAction(),
+            MessageAction(
+              contactName: widget.contactName,
+              phoneNumber: widget.phoneNumber,
+            ),
             const SizedBox(height: 24),
             const TagsSection(
               tags: ['Kurir Paket', 'Tukang Galon', 'Penipu', 'Sales Asuransi', 'Orang Baik'],
