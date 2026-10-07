@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../services/menu_storage_service.dart';
-import 'widgets/menu_bottom_nav.dart';
 import 'widgets/menu_helpers.dart';
 
 class ProtectionScreen extends StatefulWidget {
@@ -85,23 +84,6 @@ class _ProtectionScreenState extends State<ProtectionScreen> {
     setState(() => _protectionOn = false);
     await _storage.setBool(StorageKeys.protectionOn, false);
     if (mounted) showSnack(context, 'Protection stopped');
-  }
-
-  void _onNavTap(int index) {
-    switch (index) {
-      case 0:
-        Navigator.pushNamed(context, '/home');
-        showSnack(context, 'Halaman Home belum tersambung');
-        break;
-      case 1:
-        Navigator.pushNamed(context, '/chats');
-        break;
-      case 2:
-        break;
-      case 3:
-        Navigator.pop(context);
-        break;
-    }
   }
 
   Widget _levelSection() {
@@ -190,10 +172,10 @@ class _ProtectionScreenState extends State<ProtectionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBg,
-      bottomNavigationBar: MenuBottomNav(currentIndex: 2, onTap: _onNavTap),
       appBar: AppBar(
         backgroundColor: kBg,
         foregroundColor: Colors.white,
+        automaticallyImplyLeading: false,
         title: const Text('Activated Protection'),
       ),
       body: !_loaded

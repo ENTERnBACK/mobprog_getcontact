@@ -6,10 +6,8 @@ import 'menu/account_settings_screen.dart';
 import 'menu/birthday_screen.dart';
 import 'menu/edit_profile_screen.dart';
 import 'menu/notifications_screen.dart';
-import 'menu/protection_screen.dart';
 import 'menu/shortcuts_screen.dart';
 import 'menu/who_viewed_screen.dart';
-import 'menu/widgets/menu_bottom_nav.dart';
 import 'menu/widgets/menu_helpers.dart';
 import 'services/menu_storage_service.dart';
 
@@ -59,34 +57,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return file.existsSync() ? FileImage(file) : null;
   }
 
-  void _onNavTap(int index) {
-    switch (index) {
-      case 0:
-        Navigator.pushNamed(context, '/home');
-        showSnack(context, 'Halaman Home belum tersambung');
-        break;
-      case 1:
-        Navigator.pushNamed(context, '/chats');
-        break;
-      case 2:
-        _open(const ProtectionScreen());
-        break;
-      case 3:
-        break;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBg,
-      bottomNavigationBar: MenuBottomNav(currentIndex: 3, onTap: _onNavTap),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
           child: Column(
             children: [
-              // ---------- Header profile (ketuk foto untuk edit) ----------
               GestureDetector(
                 onTap: () => _open(const EditProfileScreen()),
                 child: CircleAvatar(
@@ -111,7 +90,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   style: const TextStyle(color: Colors.grey, fontSize: 12)),
               const SizedBox(height: 20),
 
-              // ---------- Birthday ----------
               Material(
                 color: kCard,
                 borderRadius: BorderRadius.circular(16),
