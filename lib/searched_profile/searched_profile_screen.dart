@@ -9,8 +9,9 @@ import 'widgets/comments_section.dart';
 
 class SearchedProfileScreen extends StatefulWidget {
   final String phoneNumber;
+  final String contactName;
 
-  const SearchedProfileScreen({super.key, required this.phoneNumber});
+  const SearchedProfileScreen({super.key, required this.phoneNumber, required this.contactName});
 
   @override
   State<SearchedProfileScreen> createState() => _SearchedProfileScreenState();
@@ -21,10 +22,31 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<Map<String, String>> dynamicComments = [];
+    List<String> dynamicTags = [];
+
+    if (widget.contactName.toLowerCase() == 'budi') {
+      dynamicComments = [
+        {'name': 'Andi', 'text': 'Oh ini nomor Budi temen kampus.'},
+        {'name': 'Anonim', 'text': 'Sering ngutang di kantin.'},
+      ];
+      dynamicTags = ['Teman Kampus', 'Tukang Ngutang'];
+    } else if (widget.contactName.toLowerCase() == 'caca') {
+      dynamicComments = [
+        {'name': 'Siti', 'text': 'Ini nomor Caca yang jualan kue.'},
+      ];
+      dynamicTags = ['Jualan Kue', 'Teman SMP'];
+    } else {
+      dynamicComments = [
+        {'name': 'Sistem', 'text': 'No comments available for this number.'},
+      ];
+      dynamicTags = ['Baru Dikenal'];
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Profil Nomor'),
+        title: const Text('Profile Number'),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0.5,
@@ -42,7 +64,7 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
               
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(_isSaved ? 'Kontak disimpan!' : 'Kontak dihapus dari simpanan.'),
+                  content: Text(_isSaved ? 'Contact saved!' : 'Contact removed from saved.'),
                   duration: const Duration(seconds: 2),
                 ),
               );
@@ -53,7 +75,7 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
           IconButton(
             icon: const Icon(Icons.share_outlined),
             onPressed: () {
-              final String shareText = 'Cek nomor ini: ${widget.phoneNumber} di aplikasi kita! Banyak yang tag dia sebagai Kurir Paket.';
+              final String shareText = 'Check out this number: ${widget.phoneNumber} on our app!';
               
               Share.share(shareText);
             },
@@ -67,18 +89,24 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
           children: [
             ProfileSummary(
               phoneNumber: widget.phoneNumber, 
-              primaryName: 'Kurir Paket JNT',
+              primaryName: widget.contactName,
             ),
             const SizedBox(height: 24),
-            const MessageAction(),
+            MessageAction(
+              contactName: widget.contactName,
+              phoneNumber: widget.phoneNumber,
+            ),
             const SizedBox(height: 24),
-            const TagsSection(
-              tags: ['Kurir Paket', 'Tukang Galon', 'Penipu', 'Sales Asuransi', 'Orang Baik'],
+            TagsSection(
+              phoneNumber: widget.phoneNumber,
+              initialTags: dynamicTags,
             ),
             const SizedBox(height: 24),
             PersonalNote(phoneNumber: widget.phoneNumber),
             const SizedBox(height: 24),
-            const CommentsSection(),
+            CommentsSection(
+              comments: dynamicComments,
+            ),
           ],
         ),
       ),
