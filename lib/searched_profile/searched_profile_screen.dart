@@ -51,28 +51,43 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
     double dynamicRating = 0.0;
     int dynamicReviews = 0;
 
-    if (widget.contactName.toLowerCase() == 'budi') {
-      dynamicComments = [
-        {'name': 'Andi', 'text': 'Oh ini nomor Budi temen kampus.'},
-        {'name': 'Anonim', 'text': 'Sering ngutang di kantin.'},
-      ];
-      dynamicTags = ['Teman Kampus', 'Tukang Ngutang'];
-      dynamicRating = 4.2;
-      dynamicReviews = 15;
-    } else if (widget.contactName.toLowerCase() == 'caca') {
-      dynamicComments = [
-        {'name': 'Siti', 'text': 'Ini nomor Caca yang jualan kue.'},
-      ];
-      dynamicTags = ['Jualan Kue', 'Teman SMP'];
+    String nama = widget.contactName.toLowerCase();
+
+    if (nama == 'andi') {
+      dynamicRating = 4.5;
+      dynamicReviews = 24;
+      dynamicTags = ['Teman SD', 'Suka Main Bola'];
+      dynamicComments = [{'name': 'Budi', 'text': 'Andi jago futsal nih.'}];
+    } else if (nama == 'caca') {
       dynamicRating = 4.8;
       dynamicReviews = 32;
+      dynamicTags = ['Jualan Kue', 'Teman Kuliah'];
+      dynamicComments = [{'name': 'Siti', 'text': 'Kuenya enak banget!'}];
+    } else if (nama == 'fajar') {
+      dynamicRating = 4.1;
+      dynamicReviews = 18;
+      dynamicTags = ['Anak Kos', 'Tukang Ngutang'];
+      dynamicComments = [{'name': 'Anonim', 'text': 'Sering pinjem duit di kantin.'}];
+    } else if (nama == 'budi') {
+      dynamicRating = 4.2;
+      dynamicReviews = 15;
+      dynamicTags = ['Rajin', 'Teman Kampus'];
+      dynamicComments = [{'name': 'Andi', 'text': 'Oh ini nomor Budi temen kampus.'}];
+    } else if (nama == 'aerosol') {
+      dynamicRating = 3.9;
+      dynamicReviews = 8;
+      dynamicTags = ['Toko Material', 'Suplier'];
+      dynamicComments = [{'name': 'Pak RT', 'text': 'Toko Aerosol langganan cat.'}];
+    } else if (nama == 'dedi') {
+      dynamicRating = 4.7;
+      dynamicReviews = 50;
+      dynamicTags = ['Bos Besar', 'Client'];
+      dynamicComments = [{'name': 'Staff', 'text': 'Nomor Pak Dedi, mohon sopan.'}];
     } else {
-      dynamicComments = [
-        {'name': 'Sistem', 'text': 'No comments available for this number.'},
-      ];
-      dynamicTags = ['New Contact'];
       dynamicRating = 0.0;
       dynamicReviews = 0;
+      dynamicTags = ['Baru Dikenal'];
+      dynamicComments = [{'name': 'Sistem', 'text': 'Belum ada komentar untuk nomor ini.'}];
     }
 
     return Scaffold(
