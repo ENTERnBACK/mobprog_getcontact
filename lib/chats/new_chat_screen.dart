@@ -42,59 +42,79 @@ class NewChatScreen extends StatelessWidget {
             ),
 
             Expanded(
-              child: ValueListenableBuilder<List<Contact>>(
-                valueListenable: contacts,
-                builder: (context, list, _) {
-                  if (list.isEmpty) return const SizedBox.shrink();
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              child: AnimatedBuilder(
+                animation: Listenable.merge([contacts, groups]),
+                builder: (context, _) {
+                  final list = contacts.value;
+                  final groupList = groups.value;
+                  if (list.isEmpty && groupList.isEmpty) {
+                    return const SizedBox.shrink();
+                  }
+                  return ListView(
                     children: [
                       const SizedBox(height: 10),
-                      Container(height: 24, color: const Color(0xFF0C0C0E)),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(28, 24, 28, 12),
-                        child: Text(
-                          'Getcontact Contacts',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: list.length,
-                          itemBuilder: (context, i) {
-                            final c = list[i];
-                            return ListTile(
-                              contentPadding:
-                                  const EdgeInsets.symmetric(horizontal: 28),
-                              leading: AppAvatar(name: c.name, size: 56),
-                              title: Text(
-                                c.name,
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 18),
-                              ),
-                              subtitle: Text(
-                                c.number,
-                                style: TextStyle(
-                                    color: Colors.grey.shade400,
-                                    fontSize: 15),
-                              ),
-                              onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => ChatRoomScreen(
-                                    name: c.name,
-                                    number: c.number,
-                                  ),
+
+                      if (list.isNotEmpty) ...[
+                        Container(height: 24, color: const Color(0xFF0C0C0E)),
+                        _sectionTitle('Getcontact Contacts'),
+                        for (final c in list)
+                          ListTile(
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 28),
+                            leading: AppAvatar(name: c.name, size: 56),
+                            title: Text(
+                              c.name,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 18),
+                            ),
+                            subtitle: Text(
+                              c.number,
+                              style: TextStyle(
+                                  color: Colors.grey.shade400, fontSize: 15),
+                            ),
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => ChatRoomScreen(
+                                  name: c.name,
+                                  number: c.number,
                                 ),
                               ),
-                            );
-                          },
-                        ),
-                      ),
+                            ),
+                          ),
+                      ],
+
+                      if (groupList.isNotEmpty) ...[
+                        Container(height: 24, color: const Color(0xFF0C0C0E)),
+                        _sectionTitle('Groups'),
+                        for (final g in groupList)
+                          ListTile(
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 28),
+                            leading: _groupAvatar(56),
+                            title: Text(
+                              g.name,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 18),
+                            ),
+                            subtitle: Text(
+                              '${g.members.length} members',
+                              style: TextStyle(
+                                  color: Colors.grey.shade400, fontSize: 15),
+                            ),
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => ChatRoomScreen(
+                                  name: g.name,
+                                  number: g.id,
+                                  subtitle: '${g.members.length} members',
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                      const SizedBox(height: 24),
                     ],
                   );
                 },
@@ -103,6 +123,32 @@ class NewChatScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  static Widget _sectionTitle(String text) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(28, 24, 28, 12),
+      child: Text(
+        text,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  static Widget _groupAvatar(double size) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: Colors.blue.shade900,
+        shape: BoxShape.circle,
+      ),
+      child: Icon(Icons.group, color: Colors.blue, size: size * 0.5),
     );
   }
 
