@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'contacts.dart';
+import '../chats/chats.dart';
 
 class ContactSearchPage extends StatefulWidget {
   const ContactSearchPage({super.key});
@@ -748,9 +749,18 @@ class ContactDetailPage extends StatelessWidget {
                   ),
                 ),
 
-                onTap: () {},
-              ),
-            ),
+                onTap: () {
+                   Navigator.push(
+          context,
+        MaterialPageRoute(
+          builder: (context) => const ChatScreen(),
+        ),
+      );
+    },
+  ),
+),
+              
+             
 
             const SizedBox(height: 25),
 
