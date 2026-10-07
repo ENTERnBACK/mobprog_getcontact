@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../login.dart';
 import '../services/menu_storage_service.dart';
 import '../services/url_service.dart';
 import 'widgets/menu_helpers.dart';
@@ -34,8 +35,16 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
     });
   }
 
+  void _goToLogin() {
+    Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const WelcomeScreen()),
+      (route) => false,
+    );
+  }
+
   Future<void> _editEmail() async {
-    final ctrl = TextEditingController(text: _email == 'Belum diatur' ? '' : _email);
+    final ctrl =
+        TextEditingController(text: _email == 'Belum diatur' ? '' : _email);
     final result = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -70,55 +79,76 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
     final confirmCtrl = TextEditingController();
     String? error;
 
+    // true = password disembunyikan
+    bool hideOld = true;
+    bool hideNew = true;
+    bool hideConfirm = true;
+
     await showDialog(
       context: context,
       builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setLocal) => AlertDialog(
-          title: const Text('Ubah Password'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                  controller: oldCtrl,
-                  obscureText: true,
-                  decoration: const InputDecoration(labelText: 'Password lama')),
-              TextField(
-                  controller: newCtrl,
-                  obscureText: true,
-                  decoration: const InputDecoration(labelText: 'Password baru')),
-              TextField(
-                  controller: confirmCtrl,
-                  obscureText: true,
-                  decoration:
-                      const InputDecoration(labelText: 'Konfirmasi password')),
-              if (error != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(error!, style: const TextStyle(color: Colors.red)),
+        builder: (ctx, setLocal) {
+          Widget field(String label, TextEditingController c, bool hidden,
+              VoidCallback toggle) {
+            return TextField(
+              controller: c,
+              obscureText: hidden,
+              decoration: InputDecoration(
+                labelText: label,
+                suffixIcon: IconButton(
+                  tooltip: hidden ? 'Lihat password' : 'Sembunyikan password',
+                  icon: Icon(
+                      hidden ? Icons.visibility : Icons.visibility_off),
+                  onPressed: toggle,
                 ),
-            ],
-          ),
-          actions: [
-            TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: const Text('Batal')),
-            TextButton(
-              onPressed: () {
-                if (oldCtrl.text.isEmpty) {
-                  setLocal(() => error = 'Password lama wajib diisi');
-                } else if (newCtrl.text.length < 6) {
-                  setLocal(() => error = 'Password baru minimal 6 karakter');
-                } else if (newCtrl.text != confirmCtrl.text) {
-                  setLocal(() => error = 'Konfirmasi password tidak cocok');
-                } else {
-                  Navigator.pop(ctx);
-                  showSnack(context, 'Password berhasil diubah!');
-                }
-              },
-              child: const Text('Simpan'),
+              ),
+            );
+          }
+
+          return AlertDialog(
+            title: const Text('Ubah Password'),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  field('Password lama', oldCtrl, hideOld,
+                      () => setLocal(() => hideOld = !hideOld)),
+                  field('Password baru', newCtrl, hideNew,
+                      () => setLocal(() => hideNew = !hideNew)),
+                  field('Konfirmasi password', confirmCtrl, hideConfirm,
+                      () => setLocal(() => hideConfirm = !hideConfirm)),
+                  if (error != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Text(error!,
+                          style: const TextStyle(color: Colors.red)),
+                    ),
+                ],
+              ),
             ),
-          ],
-        ),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: const Text('Batal')),
+              TextButton(
+                onPressed: () {
+                  if (oldCtrl.text.isEmpty) {
+                    setLocal(() => error = 'Password lama wajib diisi');
+                  } else if (newCtrl.text.length < 6) {
+                    setLocal(() => error = 'Password baru minimal 6 karakter');
+                  } else if (newCtrl.text != confirmCtrl.text) {
+                    setLocal(() => error = 'Konfirmasi password tidak cocok');
+                  } else {
+                    // TODO: sambungkan ke sistem login (Fui) bila sudah ada auth
+                    Navigator.pop(ctx);
+                    showSnack(context, 'Password berhasil diubah!');
+                  }
+                },
+                child: const Text('Simpan'),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -152,8 +182,17 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
 
   Future<void> _logout() async {
     if (!await _confirm('Log Out', 'Yakin ingin keluar?', 'Log Out')) return;
+    // TODO: hapus sesi login milik Fui di sini (kalau sudah ada)
     if (!mounted) return;
-    Navigator.popUntil(context, (route) => route.isFirst);
+    final messenger = ScaffoldMessenger.of(context);
+    _goToLogin();
+    messenger.showSnackBar(
+      const SnackBar(
+        content: Text('Berhasil log out'),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   Future<void> _deleteAccount() async {
@@ -166,7 +205,15 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
     }
     await _storage.clearAll();
     if (!mounted) return;
-    Navigator.popUntil(context, (route) => route.isFirst);
+    final messenger = ScaffoldMessenger.of(context);
+    _goToLogin();
+    messenger.showSnackBar(
+      const SnackBar(
+        content: Text('Akun berhasil dihapus'),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   @override

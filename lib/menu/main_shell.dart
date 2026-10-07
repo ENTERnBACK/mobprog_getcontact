@@ -12,7 +12,7 @@ import 'widgets/menu_helpers.dart';
 class MenuShell extends StatefulWidget {
   final int initialIndex;
 
-  const MenuShell({super.key, this.initialIndex = 3});
+  const MenuShell({super.key, this.initialIndex = 0});
 
   @override
   State<MenuShell> createState() => _MenuShellState();
