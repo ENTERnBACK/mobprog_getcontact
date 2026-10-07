@@ -51,11 +51,11 @@ class _PersonalNoteState extends State<PersonalNote> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Edit Catatan'),
+          title: const Text('Edit Note'),
           content: TextField(
             controller: _noteController,
             decoration: const InputDecoration(
-              hintText: 'Tulis catatan untuk nomor ini...',
+              hintText: 'Add a note for this number...',
               border: OutlineInputBorder(),
             ),
             maxLines: 3,
@@ -63,14 +63,14 @@ class _PersonalNoteState extends State<PersonalNote> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Batal', style: TextStyle(color: Colors.grey)),
+              child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
             ),
             ElevatedButton(
               onPressed: () {
                 _saveNote(_noteController.text);
                 Navigator.pop(context);
               },
-              child: const Text('Simpan'),
+              child: const Text('Save'),
             ),
           ],
         );
@@ -98,7 +98,7 @@ class _PersonalNoteState extends State<PersonalNote> {
                   Icon(Icons.edit_note, color: Colors.amber.shade800),
                   const SizedBox(width: 8),
                   Text(
-                    'Catatan Pribadi',
+                    'Personal Note',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,

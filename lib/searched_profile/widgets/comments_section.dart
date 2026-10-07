@@ -15,12 +15,12 @@ class CommentsSection extends StatelessWidget {
             const Icon(Icons.comment_bank_outlined, color: Colors.blueAccent, size: 20),
             const SizedBox(width: 8),
             const Text(
-              'Komentar Komunitas',
+              'Comments',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const Spacer(),
             Text(
-              '${comments.length} Komentar',
+              '${comments.length} Comments',
               style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
             ),
           ],

@@ -25,7 +25,7 @@ class MessageAction extends StatelessWidget {
         },
         icon: const Icon(Icons.chat_bubble_outline),
         label: const Text(
-          'Kirim Pesan',
+          'Send Message',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         style: ElevatedButton.styleFrom(

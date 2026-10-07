@@ -38,7 +38,7 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
       dynamicTags = ['Jualan Kue', 'Teman SMP'];
     } else {
       dynamicComments = [
-        {'name': 'Sistem', 'text': 'Belum ada komentar untuk nomor ini.'},
+        {'name': 'Sistem', 'text': 'No comments available for this number.'},
       ];
       dynamicTags = ['Baru Dikenal'];
     }
@@ -46,7 +46,7 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Profil Nomor'),
+        title: const Text('Profile Number'),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0.5,
@@ -64,7 +64,7 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
               
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(_isSaved ? 'Kontak disimpan!' : 'Kontak dihapus dari simpanan.'),
+                  content: Text(_isSaved ? 'Contact saved!' : 'Contact removed from saved.'),
                   duration: const Duration(seconds: 2),
                 ),
               );
@@ -75,7 +75,7 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
           IconButton(
             icon: const Icon(Icons.share_outlined),
             onPressed: () {
-              final String shareText = 'Cek nomor ini: ${widget.phoneNumber} di aplikasi kita! Banyak yang tag dia sebagai Kurir Paket.';
+              final String shareText = 'Check out this number: ${widget.phoneNumber} on our app!';
               
               Share.share(shareText);
             },

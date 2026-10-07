@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class TagsSection extends StatefulWidget {
   final String phoneNumber;
-  final List<String> initialTags; // Tag bawaan dummy
+  final List<String> initialTags; 
 
   const TagsSection({
     super.key, 
@@ -25,18 +25,15 @@ class _TagsSectionState extends State<TagsSection> {
     _loadTags();
   }
 
-  // Mengambil tag dari memori lokal berdasarkan nomor telepon
   Future<void> _loadTags() async {
     final prefs = await SharedPreferences.getInstance();
     final savedTags = prefs.getStringList('tags_${widget.phoneNumber}');
     setState(() {
-      // Jika belum ada tag yang disimpan, pakai tag awal (initialTags)
       _tags = savedTags ?? List.from(widget.initialTags);
       _isLoading = false;
     });
   }
 
-  // Menyimpan tag baru
   Future<void> _addTag(String newTag) async {
     if (newTag.trim().isEmpty) return;
     
@@ -44,36 +41,34 @@ class _TagsSectionState extends State<TagsSection> {
     setState(() {
       _tags.add(newTag.trim());
     });
-    // Simpan list terbaru ke memori
     await prefs.setStringList('tags_${widget.phoneNumber}', _tags);
   }
 
-  // Memunculkan dialog untuk mengetik tag baru
   void _showAddTagDialog() {
     final TextEditingController tagController = TextEditingController();
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Tambah Penanda (Tag)'),
+          title: const Text('Add Tag'),
           content: TextField(
             controller: tagController,
             decoration: const InputDecoration(
-              hintText: 'Contoh: Kurir, Teman, Penipu',
+              hintText: 'Example: Kurir, Teman, Penipu',
               border: OutlineInputBorder(),
             ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Batal', style: TextStyle(color: Colors.grey)),
+              child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
             ),
             ElevatedButton(
               onPressed: () {
                 _addTag(tagController.text);
                 Navigator.pop(context);
               },
-              child: const Text('Simpan'),
+              child: const Text('Save'),
             ),
           ],
         );
@@ -108,7 +103,6 @@ class _TagsSectionState extends State<TagsSection> {
           spacing: 8.0,
           runSpacing: 10.0,
           children: [
-            // List Tag yang ada
             ..._tags.map((tag) {
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
@@ -127,7 +121,6 @@ class _TagsSectionState extends State<TagsSection> {
               );
             }),
             
-            // Tombol "Tambah Tag"
             GestureDetector(
               onTap: _showAddTagDialog,
               child: Container(
