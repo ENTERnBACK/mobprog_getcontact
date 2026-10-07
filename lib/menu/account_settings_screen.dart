@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../login.dart';
 import '../services/menu_storage_service.dart';
 import '../services/url_service.dart';
 import 'widgets/menu_helpers.dart';
@@ -35,8 +36,10 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
   }
 
   void _goToLogin() {
-    Navigator.of(context, rootNavigator: true)
-        .pushNamedAndRemoveUntil('/', (route) => false);
+    Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const WelcomeScreen()),
+      (route) => false,
+    );
   }
 
   Future<void> _editEmail() async {
@@ -76,6 +79,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
     final confirmCtrl = TextEditingController();
     String? error;
 
+    // true = password disembunyikan
     bool hideOld = true;
     bool hideNew = true;
     bool hideConfirm = true;
