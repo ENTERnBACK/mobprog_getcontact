@@ -17,16 +17,41 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   late final List<Message> _messages =
       List.of(chatHistory.value[widget.number] ?? []);
 
+  String _replyFor(String text) {
+    final t = text.toLowerCase();
+    if (t.contains('halo') || t.contains('hai') || t.contains('hi')) {
+      return 'Hai!';
+    }
+    if (t.contains('apa kabar')) return 'Baik, kamu gimana?';
+    if (t.contains('makasih') || t.contains('terima kasih')) {
+      return 'Sama-sama!';
+    }
+    return 'Oke 👍';
+  }
+
+  void _saveHistory() {
+    final history = Map<String, List<Message>>.of(chatHistory.value);
+    history.remove(widget.number);
+    history[widget.number] = List.of(_messages);
+    chatHistory.value = history;
+  }
+
   void _send() {
     final t = _msg.text.trim();
     if (t.isEmpty) return;
     setState(() => _messages.add(Message(text: t, time: DateTime.now())));
     _msg.clear();
+    _saveHistory();
 
-    final history = Map<String, List<Message>>.of(chatHistory.value);
-    history.remove(widget.number);
-    history[widget.number] = List.of(_messages);
-    chatHistory.value = history;
+    Future.delayed(const Duration(seconds: 1), () {
+      _messages.add(Message(
+        text: _replyFor(t),
+        time: DateTime.now(),
+        isMe: false,
+      ));
+      if (mounted) setState(() {});
+      _saveHistory();
+    });
   }
 
   @override
@@ -117,16 +142,22 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                   const SizedBox(height: 20),
                   for (final m in _messages)
                     Align(
-                      alignment: Alignment.centerRight,
+                      alignment: m.isMe
+                          ? Alignment.centerRight
+                          : Alignment.centerLeft,
                       child: Container(
                         margin: const EdgeInsets.only(bottom: 10),
                         padding: const EdgeInsets.fromLTRB(18, 12, 14, 8),
                         decoration: BoxDecoration(
-                          color: Colors.blue.shade900,
+                          color: m.isMe
+                              ? Colors.blue.shade900
+                              : const Color(0xFF2A2A30),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                          crossAxisAlignment: m.isMe
+                              ? CrossAxisAlignment.end
+                              : CrossAxisAlignment.start,
                           children: [
                             Text(m.text,
                                 style: const TextStyle(
