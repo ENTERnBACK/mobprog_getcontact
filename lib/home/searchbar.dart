@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'contacts.dart';
 import '../chats/chats.dart';
+import 'my_tags.dart';
 
 class ContactSearchPage extends StatefulWidget {
   const ContactSearchPage({super.key});
@@ -224,45 +225,64 @@ class _ContactSearchPageState extends State<ContactSearchPage> {
             ),
 
             const SizedBox(height: 25),
+// =========================
+// SEARCH BAR
+// =========================
+Container(
+  decoration: BoxDecoration(
+    color: const Color(0xFF1E1E1E),
+    borderRadius: BorderRadius.circular(15),
+  ),
 
-            // =========================
-            // SEARCH BAR
-            // =========================
-            Container(
-              decoration: BoxDecoration(
-                color: const Color(0xFF1E1E1E),
-                borderRadius: BorderRadius.circular(15),
-              ),
+  child: TextField(
+    onChanged: _runFilter,
 
-              child: TextField(
-                onChanged: _runFilter,
+    style: const TextStyle(
+      color: Colors.white,
+    ),
 
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
+    decoration: const InputDecoration(
+      hintText: 'Cari nama atau nomor...',
 
-                decoration: const InputDecoration(
-                  hintText: 'Cari nama atau nomor...',
+      hintStyle: TextStyle(
+        color: Colors.grey,
+      ),
 
-                  hintStyle: TextStyle(
-                    color: Colors.grey,
-                  ),
+      prefixIcon: Icon(
+        Icons.search,
+        color: Colors.grey,
+      ),
 
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Colors.grey,
-                  ),
+      border: InputBorder.none,
 
-                  border: InputBorder.none,
+      contentPadding: EdgeInsets.symmetric(
+        vertical: 15,
+      ),
+    ),
+  ),
+),
 
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: 15,
-                  ),
-                ),
-              ),
-            ),
+const SizedBox(height: 30),
 
-            const SizedBox(height: 30),
+// =========================
+// MY TAGS
+// =========================
+if (!isSearching) ...[
+  const Text(
+    'My Tags',
+    style: TextStyle(
+      color: Colors.white,
+      fontSize: 19,
+      fontWeight: FontWeight.bold,
+    ),
+  ),
+
+  const SizedBox(height: 15),
+
+  const MyTagsSection(),
+
+  const SizedBox(height: 30),
+],
 
             // ======================================================
             // SEARCH RESULT / RECENT SEARCHES
@@ -781,6 +801,7 @@ class ContactDetailPage extends StatelessWidget {
             ),
 
             const SizedBox(height: 10),
+            
 
             const Align(
               alignment: Alignment.centerLeft,
@@ -805,3 +826,4 @@ class ContactDetailPage extends StatelessWidget {
     );
   }
 }
+

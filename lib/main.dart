@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
 
       theme: ThemeData(useMaterial3: true, colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
-      home: const WelcomeScreen(),
+      home: const MenuShell(),
       routes: {
         '/chats': (context) => const ChatScreen(),
         '/menu': (context) => const MenuShell(),
