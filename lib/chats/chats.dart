@@ -110,12 +110,12 @@ class ChatScreen extends StatelessWidget {
 
                         return Column(
                           children: [
-                            if (entries.isNotEmpty)
-                              _chatList(context, entries),
-                            if (entries.isNotEmpty && suggestions.isNotEmpty)
-                              const SizedBox(height: 28),
                             if (suggestions.isNotEmpty)
                               _suggestions(context, suggestions),
+                            if (entries.isNotEmpty && suggestions.isNotEmpty)
+                              const SizedBox(height: 28),
+                            if (entries.isNotEmpty)
+                              _chatList(context, entries),
                           ],
                         );
                       },
