@@ -24,23 +24,36 @@ class _ContactFormScreenState extends State<ContactFormScreen> {
   }
 
   void _save() {
-    final name = '${_first.text.trim()} ${_last.text.trim()}'.trim();
-    if (name.isEmpty || _phone.text.trim().isEmpty) {
+    final first = _first.text.trim();
+    final phone = _phone.text.trim();
+    final name = '$first ${_last.text.trim()}'.trim();
+
+    String? warning;
+    if (first.isEmpty && phone.isEmpty) {
+      warning = 'Please input your first name and phone number';
+    } else if (first.isEmpty) {
+      warning = 'Please input your first name';
+    } else if (phone.isEmpty) {
+      warning = 'Please input your phone number';
+    }
+
+    if (warning != null) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Isi nama dan nomor dulu')),
+        SnackBar(content: Text(warning)),
       );
       return;
     }
+
     contacts.value = [
       ...contacts.value,
-      Contact(name: name, number: _phone.text.trim()),
+      Contact(name: name, number: phone),
     ];
     final nav = Navigator.of(context);
     nav.popUntil((route) => route.isFirst);
     nav.push(
       MaterialPageRoute(
-        builder: (_) =>
-            ChatRoomScreen(name: name, number: _phone.text.trim()),
+        builder: (_) => ChatRoomScreen(name: name, number: phone),
       ),
     );
   }
@@ -87,11 +100,11 @@ class _ContactFormScreenState extends State<ContactFormScreen> {
                           color: Colors.white, size: 60),
                     ),
                     const SizedBox(height: 32),
-                    _field(_first, 'First Name'),
+                    _field(_first, 'First Name *'),
                     const SizedBox(height: 22),
                     _field(_last, 'Last Name'),
                     const SizedBox(height: 22),
-                    _field(_phone, 'Phone Number (Mobile)',
+                    _field(_phone, 'Phone Number (Mobile) *',
                         type: TextInputType.phone),
                   ],
                 ),
