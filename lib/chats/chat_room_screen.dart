@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'contact_store.dart';
 import 'widget/common.dart';
 
 class ChatRoomScreen extends StatefulWidget {
@@ -12,13 +14,20 @@ class ChatRoomScreen extends StatefulWidget {
 
 class _ChatRoomScreenState extends State<ChatRoomScreen> {
   final _msg = TextEditingController();
-  final List<String> _messages = [];
+  late final List<String> _messages =
+      List.of(chatHistory.value[widget.number] ?? []);
 
   void _send() {
     final t = _msg.text.trim();
     if (t.isEmpty) return;
     setState(() => _messages.add(t));
     _msg.clear();
+
+    // Simpan ke riwayat, dan pindahkan chat ini jadi yang terbaru
+    final history = Map<String, List<String>>.of(chatHistory.value);
+    history.remove(widget.number);
+    history[widget.number] = List.of(_messages);
+    chatHistory.value = history;
   }
 
   @override
