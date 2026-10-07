@@ -9,6 +9,7 @@ class MessageAction extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton.icon(
         onPressed: () {
+          Navigator.pushNamed(context, '/chats');
         },
         icon: const Icon(Icons.chat_bubble_outline),
         label: const Text(
