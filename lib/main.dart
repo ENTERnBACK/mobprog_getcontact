@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'GetContact',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const WelcomeScreen(),
+      home: const ContactSearchPage(),
       routes: {
         '/chats': (context) => const ChatScreen(),
         '/menu': (context) => const MenuShell(),
