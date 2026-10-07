@@ -26,7 +26,6 @@ class WelcomeScreen extends StatelessWidget {
               const Spacer(flex: 3),
 
               const AuthHeader(
-                logoPath: 'assets/icon/icon.png',
                 title: 'GetContact',
                 subtitle: 'Temukan dan kelola kontakmu dengan mudah',
               ),
