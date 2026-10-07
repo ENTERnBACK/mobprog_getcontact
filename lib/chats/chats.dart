@@ -63,13 +63,38 @@ class ChatScreen extends StatelessWidget {
                 children: [
                   SingleChildScrollView(
                     padding: const EdgeInsets.all(28),
-                    child: ValueListenableBuilder<List<Contact>>(
-                      valueListenable: contacts,
-                      builder: (context, list, _) {
+                    child: AnimatedBuilder(
+                      animation: Listenable.merge([contacts, chatHistory]),
+                      builder: (context, _) {
+                        final all = contacts.value;
+                        final history = chatHistory.value;
+
                         // Belum ada kontak -> No active chat
-                        if (list.isEmpty) return _noActiveChat();
-                        // Sudah ada kontak -> Chat Suggestions
-                        return _suggestions(context, list);
+                        if (all.isEmpty) return _noActiveChat();
+
+                        // Kontak yang sudah pernah di-chat (terbaru di atas)
+                        final chats = <Contact>[];
+                        for (final n in history.keys.toList().reversed) {
+                          final i = all.indexWhere((c) => c.number == n);
+                          if (i != -1 && history[n]!.isNotEmpty) {
+                            chats.add(all[i]);
+                          }
+                        }
+
+                        // Kontak yang baru disimpan, belum pernah di-chat
+                        final suggestions =
+                            all.where((c) => !chats.contains(c)).toList();
+
+                        return Column(
+                          children: [
+                            if (chats.isNotEmpty)
+                              _chatList(context, chats, history),
+                            if (chats.isNotEmpty && suggestions.isNotEmpty)
+                              const SizedBox(height: 28),
+                            if (suggestions.isNotEmpty)
+                              _suggestions(context, suggestions),
+                          ],
+                        );
                       },
                     ),
                   ),
@@ -84,6 +109,15 @@ class ChatScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _openRoom(BuildContext context, Contact c) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ChatRoomScreen(name: c.name, number: c.number),
       ),
     );
   }
@@ -133,6 +167,47 @@ class ChatScreen extends StatelessWidget {
     );
   }
 
+  // Daftar chat yang sudah ada riwayatnya
+  Widget _chatList(
+    BuildContext context,
+    List<Contact> chats,
+    Map<String, List<String>> history,
+  ) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        color: kCard,
+        borderRadius: BorderRadius.circular(28),
+      ),
+      child: Column(
+        children: [
+          for (final c in chats)
+            ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+              leading: AppAvatar(name: c.name, size: 52),
+              title: Text(
+                c.name,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              subtitle: Text(
+                history[c.number]!.last,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: Colors.grey.shade400, fontSize: 14),
+              ),
+              onTap: () => _openRoom(context, c),
+            ),
+        ],
+      ),
+    );
+  }
+
+  // Kontak tersimpan yang belum pernah di-chat
   Widget _suggestions(BuildContext context, List<Contact> list) {
     return Container(
       width: double.infinity,
@@ -162,13 +237,7 @@ class ChatScreen extends StatelessWidget {
               itemBuilder: (context, i) {
                 final c = list[i];
                 return GestureDetector(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          ChatRoomScreen(name: c.name, number: c.number),
-                    ),
-                  ),
+                  onTap: () => _openRoom(context, c),
                   child: SizedBox(
                     width: 64,
                     child: Column(
