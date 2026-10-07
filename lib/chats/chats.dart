@@ -65,7 +65,6 @@ class ChatScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(28),
                     child: Column(
                       children: [
-                        // No active chat
                         Container(
                           width: double.infinity,
                           padding: const EdgeInsets.all(28),
@@ -191,7 +190,6 @@ class ChatScreen extends StatelessWidget {
                     ),
                   ),
 
-                  // Add Button
                   const Positioned(
                     right: 28,
                     bottom: 25,
@@ -200,41 +198,9 @@ class ChatScreen extends StatelessWidget {
                 ],
               ),
             ),
-
-            // Bottom Navigation
-            Container(
-              height: 90,
-              decoration: const BoxDecoration(color: kCard),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _bottomItem(Icons.phone, 'Home', false),
-                  _bottomItem(Icons.chat_bubble, 'Chat', true),
-                  _bottomItem(Icons.shield, 'Protection', false),
-                  _bottomItem(Icons.menu, 'Menu', false),
-                ],
-              ),
-            ),
           ],
         ),
       ),
-    );
-  }
-
-  static Widget _bottomItem(IconData icon, String title, bool selected) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, color: selected ? Colors.blue : Colors.grey, size: 28),
-        const SizedBox(height: 5),
-        Text(
-          title,
-          style: TextStyle(
-            color: selected ? Colors.blue : Colors.grey,
-            fontSize: 13,
-          ),
-        ),
-      ],
     );
   }
 }
