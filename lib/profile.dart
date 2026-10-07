@@ -1,6 +1,8 @@
+// File: lib/profile.dart  (halaman Menu / Settings - Elizabeth)
 import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'menu/account_settings_screen.dart';
 import 'menu/birthday_screen.dart';
@@ -25,6 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String _phone = '+62800xxxx';
   String? _imagePath;
   String? _birthday;
+  bool _copyEnabled = true;
 
   @override
   void initState() {
@@ -37,13 +40,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final phone = await _storage.getString(StorageKeys.phone, '+62800xxxx');
     final img = await _storage.getStringOrNull(StorageKeys.imagePath);
     final bday = await _storage.getStringOrNull(StorageKeys.birthday);
+    final copy = await _storage.getBool(StorageKeys.scCopy, true);
     if (!mounted) return;
     setState(() {
       _name = name;
       _phone = phone;
       _imagePath = img;
       _birthday = bday;
+      _copyEnabled = copy;
     });
+  }
+
+  Future<void> _copyPhone() async {
+    if (!_copyEnabled) {
+      showSnack(context, 'Aktifkan Quick Copy Number di Shortcuts', error: true);
+      return;
+    }
+    await Clipboard.setData(ClipboardData(text: _phone));
+    if (mounted) showSnack(context, 'Nomor disalin: $_phone');
   }
 
   Future<void> _open(Widget page) async {
@@ -86,8 +100,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 4),
-              Text(_phone,
-                  style: const TextStyle(color: Colors.grey, fontSize: 12)),
+              GestureDetector(
+                onLongPress: _copyPhone,
+                child: Text(_phone,
+                    style: const TextStyle(color: Colors.grey, fontSize: 12)),
+              ),
               const SizedBox(height: 20),
 
               Material(
