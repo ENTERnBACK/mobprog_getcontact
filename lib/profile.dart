@@ -7,6 +7,8 @@ import 'menu/birthday_screen.dart';
 import 'menu/edit_profile_screen.dart';
 import 'menu/notifications_screen.dart';
 import 'menu/protection_screen.dart';
+import 'menu/shortcuts_screen.dart';
+import 'menu/who_viewed_screen.dart';
 import 'menu/widgets/menu_bottom_nav.dart';
 import 'menu/widgets/menu_helpers.dart';
 import 'services/menu_storage_service.dart';
@@ -20,8 +22,6 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final MenuStorageService _storage = MenuStorageService();
-
-  static const int _tagCount = 19;
 
   String _name = 'Elizabeth';
   String _phone = '+62800xxxx';
@@ -61,13 +61,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _onNavTap(int index) {
     switch (index) {
+      case 0:
+        Navigator.pushNamed(context, '/home');
+        showSnack(context, 'Halaman Home belum tersambung');
+        break;
       case 1:
         Navigator.pushNamed(context, '/chats');
         break;
+      case 2:
+        _open(const ProtectionScreen());
+        break;
       case 3:
         break;
-      default:
-        showSnack(context, 'Halaman ini belum tersambung');
     }
   }
 
@@ -81,6 +86,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
           child: Column(
             children: [
+              // ---------- Header profile (ketuk foto untuk edit) ----------
               GestureDetector(
                 onTap: () => _open(const EditProfileScreen()),
                 child: CircleAvatar(
@@ -105,34 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   style: const TextStyle(color: Colors.grey, fontSize: 12)),
               const SizedBox(height: 20),
 
-              Row(
-                children: [
-                  Expanded(
-                    child: _QuickButton(
-                      top: Text('#$_tagCount',
-                          style: const TextStyle(
-                              color: kAccent,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold)),
-                      label: 'My Tags',
-                      onTap: () => showSnack(
-                          context, 'Terhubung ke halaman My Tags (Nabila)'),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _QuickButton(
-                      top: const Icon(Icons.auto_awesome,
-                          color: kAccent, size: 20),
-                      label: 'My Profile Summary',
-                      onTap: () => showSnack(
-                          context, 'Terhubung ke Profile Summary (Nabila)'),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 14),
-
+              // ---------- Birthday ----------
               Material(
                 color: kCard,
                 borderRadius: BorderRadius.circular(16),
@@ -166,60 +145,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               MenuTile(
                 icon: Icons.visibility,
                 title: 'Who Viewed My Profile',
-                onTap: () => showSnack(context, 'Fitur ini belum tersedia'),
+                onTap: () => _open(const WhoViewedScreen()),
               ),
               MenuTile(
                 icon: Icons.grid_view_rounded,
                 title: 'Shortcuts',
-                onTap: () => showSnack(context, 'Fitur ini belum tersedia'),
-              ),
-              MenuTile(
-                icon: Icons.sms_outlined,
-                title: 'Spam SMS Protection',
-                onTap: () => _open(const ProtectionScreen()),
-              ),
-              MenuTile(
-                icon: Icons.phone_missed,
-                title: 'Spam Call Settings',
-                onTap: () => _open(const ProtectionScreen()),
+                onTap: () => _open(const ShortcutsScreen()),
               ),
               MenuTile(
                 icon: Icons.manage_accounts,
                 title: 'Account Settings',
                 onTap: () => _open(const AccountSettingsScreen()),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _QuickButton extends StatelessWidget {
-  final Widget top;
-  final String label;
-  final VoidCallback onTap;
-
-  const _QuickButton(
-      {required this.top, required this.label, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: kCard,
-      borderRadius: BorderRadius.circular(16),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Column(
-            children: [
-              top,
-              const SizedBox(height: 6),
-              Text(label,
-                  style: const TextStyle(color: Colors.grey, fontSize: 11)),
             ],
           ),
         ),
