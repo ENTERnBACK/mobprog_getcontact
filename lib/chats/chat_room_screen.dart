@@ -6,7 +6,13 @@ import 'widget/common.dart';
 class ChatRoomScreen extends StatefulWidget {
   final String name;
   final String number;
-  const ChatRoomScreen({super.key, required this.name, required this.number});
+  final String? subtitle;
+  const ChatRoomScreen({
+    super.key,
+    required this.name,
+    required this.number,
+    this.subtitle,
+  });
 
   @override
   State<ChatRoomScreen> createState() => _ChatRoomScreenState();
@@ -62,6 +68,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isGroup = widget.subtitle != null;
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -92,7 +100,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                 color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600)),
-                        Text(widget.number,
+                        Text(widget.subtitle ?? widget.number,
                             style: TextStyle(
                                 color: Colors.grey.shade400, fontSize: 13)),
                       ],
@@ -117,9 +125,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                     ),
                     child: Column(
                       children: [
-                        const Text(
-                          'Kontak tersimpan',
-                          style: TextStyle(
+                        Text(
+                          isGroup ? 'Grup dibuat' : 'Kontak tersimpan',
+                          style: const TextStyle(
                               color: Colors.blue,
                               fontSize: 15,
                               fontWeight: FontWeight.w600),
@@ -133,7 +141,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold)),
                         const SizedBox(height: 4),
-                        Text(widget.number,
+                        Text(widget.subtitle ?? widget.number,
                             style: TextStyle(
                                 color: Colors.grey.shade400, fontSize: 16)),
                       ],
