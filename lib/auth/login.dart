@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'widgets/auth_button.dart';
+import 'widgets/auth_header.dart';
+
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -15,24 +17,9 @@ class WelcomeScreen extends StatelessWidget {
             children: [
               const Spacer(flex: 3),
 
-              const Text(
-                'GetContact',
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
-              ),
-
-              const SizedBox(height: 8),
-
-              Text(
-                'Temukan dan kelola kontakmu dengan mudah',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[600],
-                ),
+              const AuthHeader(
+                title: 'GetContact',
+                subtitle: 'Temukan dan kelola kontakmu dengan mudah',
               ),
 
               const Spacer(flex: 2),
@@ -62,7 +49,7 @@ class WelcomeScreen extends StatelessWidget {
               ),
               
               const SizedBox(height: 24),
-              
+
             ],
           ),
         ),
