@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'new_group_screen.dart';
 import 'chat_room_screen.dart';
 import 'contact_form_screen.dart';
 import 'contact_store.dart';
@@ -25,11 +26,11 @@ class NewChatScreen extends StatelessWidget {
             const SizedBox(height: 10),
             _actionRow(Icons.group, 'New Group', () {}),
             _actionRow(
-              Icons.person_add,
-              'New contact',
+              Icons.group,
+              'New Group',
               () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const ContactFormScreen()),
+                MaterialPageRoute(builder: (_) => const NewGroupScreen()),
               ),
             ),
 
