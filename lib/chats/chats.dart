@@ -3,10 +3,60 @@ import 'package:flutter/material.dart';
 import 'chat_room_screen.dart';
 import 'contact_store.dart';
 import 'new_chat_screen.dart';
+import 'search_screen.dart';
 import 'widget/common.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
+
+  static List<_ChatEntry> _entries() {
+    final all = contacts.value;
+    final groupList = groups.value;
+    final history = chatHistory.value;
+
+    final entries = <_ChatEntry>[];
+    for (final key in history.keys.toList().reversed) {
+      final msgs = history[key]!;
+      if (msgs.isEmpty) continue;
+
+      final ci = all.indexWhere((c) => c.number == key);
+      if (ci != -1) {
+        entries.add(_ChatEntry(
+          title: all[ci].name,
+          id: key,
+          last: msgs.last,
+        ));
+        continue;
+      }
+
+      final gi = groupList.indexWhere((g) => g.id == key);
+      if (gi != -1) {
+        entries.add(_ChatEntry(
+          title: groupList[gi].name,
+          id: key,
+          last: msgs.last,
+          subtitle: '${groupList[gi].members.length} members',
+          isGroup: true,
+        ));
+      }
+    }
+    return entries;
+  }
+
+  static List<SearchItem> _historyItems() {
+    final history = chatHistory.value;
+    return _entries()
+        .map((e) => SearchItem(
+              title: e.title,
+              subtitle: e.last.text,
+              id: e.id,
+              isGroup: e.isGroup,
+              roomSubtitle: e.subtitle,
+              keywords:
+                  '${e.title} ${history[e.id]!.map((m) => m.text).join(' ')}',
+            ))
+        .toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,18 +76,29 @@ class ChatScreen extends StatelessWidget {
                 children: [
                   const SizedBox(width: 20),
 
-                  Container(
-                    width: 62,
-                    height: 55,
-                    decoration: BoxDecoration(
-                      color: kCard,
-                      borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: Colors.grey.shade800),
+                  GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => SearchScreen(
+                          items: _historyItems(),
+                          hint: 'Search chats',
+                        ),
+                      ),
                     ),
-                    child: const Icon(
-                      Icons.search,
-                      color: Colors.white,
-                      size: 30,
+                    child: Container(
+                      width: 62,
+                      height: 55,
+                      decoration: BoxDecoration(
+                        color: kCard,
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(color: Colors.grey.shade800),
+                      ),
+                      child: const Icon(
+                        Icons.search,
+                        color: Colors.white,
+                        size: 30,
+                      ),
                     ),
                   ),
 
@@ -69,40 +130,12 @@ class ChatScreen extends StatelessWidget {
                       builder: (context, _) {
                         final all = contacts.value;
                         final groupList = groups.value;
-                        final history = chatHistory.value;
 
                         if (all.isEmpty && groupList.isEmpty) {
                           return _noActiveChat();
                         }
 
-                        final entries = <_ChatEntry>[];
-                        for (final key in history.keys.toList().reversed) {
-                          final msgs = history[key]!;
-                          if (msgs.isEmpty) continue;
-
-                          final ci = all.indexWhere((c) => c.number == key);
-                          if (ci != -1) {
-                            entries.add(_ChatEntry(
-                              title: all[ci].name,
-                              id: key,
-                              last: msgs.last,
-                            ));
-                            continue;
-                          }
-
-                          final gi = groupList.indexWhere((g) => g.id == key);
-                          if (gi != -1) {
-                            entries.add(_ChatEntry(
-                              title: groupList[gi].name,
-                              id: key,
-                              last: msgs.last,
-                              subtitle:
-                                  '${groupList[gi].members.length} members',
-                              isGroup: true,
-                            ));
-                          }
-                        }
-
+                        final entries = _entries();
                         final chatted = entries.map((e) => e.id).toSet();
                         final suggestions = all
                             .where((c) => !chatted.contains(c.number))
