@@ -9,7 +9,8 @@ class Contact {
 class Message {
   final String text;
   final DateTime time;
-  const Message({required this.text, required this.time});
+  final bool isMe;
+  const Message({required this.text, required this.time, this.isMe = true});
 }
 
 String formatTime(DateTime t) =>
