@@ -23,7 +23,7 @@ class _ContactSearchPageState extends State<ContactSearchPage> {
   final List<Contact> allContacts = [
     Contact(name: 'Andi', phone: '08123456789'),
     Contact(name: 'Budi', phone: '08567891234'),
-    Contact(name: 'Caca', phone: '08781234567'),
+    Contact(name: 'aca', phone: '08818003442'),
     Contact(name: 'Dedi', phone: '08987654321'),
   ];
 
@@ -58,29 +58,32 @@ class _ContactSearchPageState extends State<ContactSearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // BACKGROUND DARK
+      backgroundColor: const Color(0xFF000000),
 
       // =========================
       // APP BAR
       // =========================
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFF000000),
         elevation: 0,
         centerTitle: false,
+
         title: const Text(
           'GetContact',
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
+
         actions: [
           IconButton(
             onPressed: () {},
             icon: const Icon(
               Icons.notifications_none,
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
         ],
@@ -94,21 +97,37 @@ class _ContactSearchPageState extends State<ContactSearchPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             const SizedBox(height: 10),
 
+            // =========================
             // SEARCH BAR
+            // =========================
             Container(
               decoration: BoxDecoration(
-                color: Colors.grey.shade100,
+                color: const Color(0xFF1E1E1E),
                 borderRadius: BorderRadius.circular(15),
               ),
+
               child: TextField(
                 onChanged: _runFilter,
+
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
+
                 decoration: const InputDecoration(
                   hintText: 'Cari nama atau nomor...',
-                  prefixIcon: Icon(Icons.search),
+                  hintStyle: TextStyle(
+                    color: Colors.grey,
+                  ),
+
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Colors.grey,
+                  ),
+
                   border: InputBorder.none,
+
                   contentPadding: EdgeInsets.symmetric(
                     vertical: 15,
                   ),
@@ -118,33 +137,42 @@ class _ContactSearchPageState extends State<ContactSearchPage> {
 
             const SizedBox(height: 30),
 
+            // =========================
             // RECENT SEARCHES
+            // =========================
             const Text(
               'Recent Searches',
               style: TextStyle(
                 fontSize: 19,
                 fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
             ),
 
             const SizedBox(height: 15),
 
+            // =========================
             // LIST KONTAK
+            // =========================
             Expanded(
               child: filteredContacts.isNotEmpty
                   ? ListView.builder(
                       itemCount: filteredContacts.length,
+
                       itemBuilder: (context, index) {
                         final contact = filteredContacts[index];
 
                         return Container(
                           margin: const EdgeInsets.only(bottom: 12),
+
                           decoration: BoxDecoration(
-                            color: Colors.grey.shade50,
+                            color: const Color(0xFF1E1E1E),
                             borderRadius: BorderRadius.circular(15),
                           ),
+
                           child: ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
+                            contentPadding:
+                                const EdgeInsets.symmetric(
                               horizontal: 15,
                               vertical: 5,
                             ),
@@ -152,12 +180,17 @@ class _ContactSearchPageState extends State<ContactSearchPage> {
                             // FOTO / INISIAL
                             leading: CircleAvatar(
                               radius: 25,
-                              backgroundColor: Colors.blue.shade100,
+
+                              backgroundColor:
+                                  const Color(0xFF333333),
+
                               child: Text(
-                                contact.name[0],
+                                contact.name[0].toUpperCase(),
+
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.blue,
+                                  color: Colors.white,
+                                  fontSize: 18,
                                 ),
                               ),
                             ),
@@ -165,20 +198,24 @@ class _ContactSearchPageState extends State<ContactSearchPage> {
                             // NAMA
                             title: Text(
                               contact.name,
+
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
+                                color: Colors.white,
                               ),
                             ),
 
                             // NOMOR
                             subtitle: Text(
                               contact.phone,
+
                               style: const TextStyle(
                                 color: Colors.grey,
                               ),
                             ),
 
+                            // ARROW
                             trailing: const Icon(
                               Icons.arrow_forward_ios,
                               size: 16,
@@ -192,9 +229,11 @@ class _ContactSearchPageState extends State<ContactSearchPage> {
                         );
                       },
                     )
+
                   : const Center(
                       child: Text(
                         'Kontak tidak ditemukan',
+
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 16,
@@ -204,32 +243,6 @@ class _ContactSearchPageState extends State<ContactSearchPage> {
             ),
           ],
         ),
-      ),
-
-      // =========================
-      // BOTTOM NAVIGATION
-      // =========================
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        onTap: (index) {
-          // Nanti kita sambungkan ke halaman lain
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Chats',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: 'Menu',
-          ),
-        ],
       ),
     );
   }
