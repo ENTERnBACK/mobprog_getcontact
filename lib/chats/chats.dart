@@ -69,10 +69,8 @@ class ChatScreen extends StatelessWidget {
                         final all = contacts.value;
                         final history = chatHistory.value;
 
-                        // Belum ada kontak -> No active chat
                         if (all.isEmpty) return _noActiveChat();
 
-                        // Kontak yang sudah pernah di-chat (terbaru di atas)
                         final chats = <Contact>[];
                         for (final n in history.keys.toList().reversed) {
                           final i = all.indexWhere((c) => c.number == n);
@@ -81,7 +79,6 @@ class ChatScreen extends StatelessWidget {
                           }
                         }
 
-                        // Kontak yang baru disimpan, belum pernah di-chat
                         final suggestions =
                             all.where((c) => !chats.contains(c)).toList();
 
@@ -167,7 +164,6 @@ class ChatScreen extends StatelessWidget {
     );
   }
 
-  // Daftar chat yang sudah ada riwayatnya
   Widget _chatList(
     BuildContext context,
     List<Contact> chats,
@@ -211,7 +207,6 @@ class ChatScreen extends StatelessWidget {
     );
   }
 
-  // Kontak tersimpan yang belum pernah di-chat
   Widget _suggestions(BuildContext context, List<Contact> list) {
     return Container(
       width: double.infinity,

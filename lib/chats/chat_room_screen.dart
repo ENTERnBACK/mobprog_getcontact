@@ -79,7 +79,6 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               ),
             ),
 
-            // Isi chat
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.all(28),
