@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'chat_room_screen.dart';
+import 'contact_store.dart';
 import 'widget/common.dart';
 
 class ContactFormScreen extends StatefulWidget {
@@ -30,6 +31,10 @@ class _ContactFormScreenState extends State<ContactFormScreen> {
       );
       return;
     }
+    contacts.value = [
+      ...contacts.value,
+      Contact(name: name, number: _phone.text.trim()),
+    ];
     final nav = Navigator.of(context);
     nav.popUntil((route) => route.isFirst);
     nav.push(
