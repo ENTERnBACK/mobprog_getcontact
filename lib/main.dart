@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'searchbar.dart'; 
-import 'profile.dart';
 import 'auth/login.dart';
 import 'chats/chats.dart';
 import 'menu/main_shell.dart';
