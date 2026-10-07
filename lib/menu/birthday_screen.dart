@@ -85,7 +85,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
               style: TextStyle(color: Colors.grey),
             ),
             const SizedBox(height: 24),
-                        Material(
+            Material(
               color: kCard,
               borderRadius: BorderRadius.circular(16),
               clipBehavior: Clip.antiAlias,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
 import 'chats/chats.dart';
-import 'profile.dart';
+import 'menu/main_shell.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       home: const WelcomeScreen(),
       routes: {
         '/chats': (context) => const ChatScreen(),
-        '/menu': (context) => const ProfileScreen(),
+        '/menu': (context) => const MenuShell(),
       },
     );
   }
