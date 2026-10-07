@@ -3,6 +3,7 @@ import 'widgets/profile_summary.dart';
 import 'widgets/tags_section.dart';
 import 'widgets/message_action.dart';
 import 'widgets/personal_note.dart';
+import 'widgets/comments_section.dart';
 
 class SearchedProfileScreen extends StatelessWidget {
   final String phoneNumber;
@@ -41,6 +42,7 @@ class SearchedProfileScreen extends StatelessWidget {
             const PersonalNote(),
             
             const SizedBox(height: 24),
+            const CommentsSection(),
           ],
         ),
       ),
