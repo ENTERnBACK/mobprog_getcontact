@@ -225,9 +225,11 @@ class ChatScreen extends StatelessWidget {
                 child: const Icon(Icons.add, color: Colors.blue, size: 32),
               ),
               const SizedBox(width: 15),
-              const Text(
-                'You can start using this button.',
-                style: TextStyle(color: Colors.white, fontSize: 18),
+              const Expanded(
+                child: Text(
+                  'You can start using this button.',
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
               ),
             ],
           ),
