@@ -87,7 +87,7 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
       dynamicRating = 0.0;
       dynamicReviews = 0;
       dynamicTags = ['Baru Dikenal'];
-      dynamicComments = [{'name': 'Sistem', 'text': 'Belum ada komentar untuk nomor ini.'}];
+      dynamicComments = [];
     }
 
     return Scaffold(
@@ -177,6 +177,7 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
             PersonalNote(phoneNumber: widget.phoneNumber),
             const SizedBox(height: 24),
             CommentsSection(
+              phoneNumber: widget.phoneNumber,
               comments: dynamicComments,
             ),
           ],
