@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       title: 'GetContact',
       theme: ThemeData(useMaterial3: true, colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
-      home: const MenuShell(),
+      home: const WelcomeScreen(),
       routes: {
         '/chats': (context) => const ChatScreen(),
         '/menu': (context) => const MenuShell(),
