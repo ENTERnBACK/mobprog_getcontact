@@ -23,10 +23,7 @@ const ProfileSummary({
           const SizedBox(height: 16),
           Text(
             primaryName,
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white), // Tambahkan warna putih
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 6),
@@ -34,7 +31,7 @@ const ProfileSummary({
             phoneNumber,
             style: TextStyle(
               fontSize: 16,
-              color: Colors.grey.shade600,
+              color: Colors.grey.shade400,
               fontWeight: FontWeight.w500,
             ),
           ),

@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'widgets/auth_button.dart';
 import 'widgets/auth_header.dart';
+import 'auth_screens.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
+
+  void _bukaForm(BuildContext context, {required bool isLogin}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => AuthScreen(isLoginAwal: isLogin)),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +45,7 @@ class WelcomeScreen extends StatelessWidget {
 
               AuthButton(
                 label: 'Login',
-                onPressed: () {},
+                onPressed: () => _bukaForm(context, isLogin: true),
               ),
 
               const SizedBox(height: 12),
@@ -44,7 +53,7 @@ class WelcomeScreen extends StatelessWidget {
               AuthButton(
                 label: 'Sign Up',
                 isPrimary: false,
-                onPressed: () {},
+                onPressed: () => _bukaForm(context, isLogin: false),
               ),
               
               const SizedBox(height: 24),
