@@ -18,7 +18,6 @@ class AuthService {
     }
     await _s.setString(StorageKeys.authPassword, password);
 
-    // Akun baru: buang sisa foto dan birthday dari akun sebelumnya.
     await _s.remove(StorageKeys.imagePath);
     await _s.remove(StorageKeys.birthday);
 
