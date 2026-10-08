@@ -34,9 +34,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> _load() async {
-    final name = await _storage.getString(StorageKeys.name, 'Elizabeth');
-    final phone =
-        await _storage.getString(StorageKeys.phone, '+62 812-0000-0000');
+    final name = await _storage.getString(StorageKeys.name, '');
+    final phone = await _storage.getString(StorageKeys.phone, '');
     final img = await _storage.getStringOrNull(StorageKeys.imagePath);
     if (!mounted) return;
     setState(() {
