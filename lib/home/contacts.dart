@@ -1,6 +1,7 @@
 class Contact {
   final String name;
   final String phone;
+  
 
   Contact({
     required this.name,
@@ -10,8 +11,20 @@ class Contact {
 
 final List<Contact> contacts = [
   Contact(
+    name: 'Abeth',
+    phone: '081216672830',
+  ),
+  Contact(
+    name: 'Ace',
+    phone: '0813121415177',
+  ),
+  Contact(
     name: 'Aerosol',
     phone: '08123456789',
+  ),
+  Contact(
+    name: 'Ame',
+    phone: '081311712335',
   ),
   Contact(
     name: 'Budi',
@@ -22,16 +35,24 @@ final List<Contact> contacts = [
     phone: '08818003442',
   ),
   Contact(
-    name: 'Dedi',
+    name: 'Carl',
+    phone: '0814536743992',
+  ),
+  Contact(
+    name: 'dedi',
     phone: '08987654321',
   ),
   Contact(
-    name: 'Eka',
+    name: 'eka',
     phone: '08129876543',
   ),
   Contact(
     name: 'Fajar',
     phone: '082112345678',
+  ),
+  Contact(
+    name: 'Fui',
+    phone: '081889283741',
   ),
   Contact(
     name: 'Gita',
@@ -41,65 +62,41 @@ final List<Contact> contacts = [
     name: 'Hana',
     phone: '085212345678',
   ),
-
+  Contact(
+    name: 'karina',
+    phone: '0812436289392',
+  ),
+  Contact(
+    name: 'Lupi',
+    phone: '0899283788221',
+  ),
   Contact(
     name: 'marsyha',
     phone: '08818003442',
   ),
-
   Contact(
-    name: 'pikachu',
+    name: 'Miya',
+    phone: '0856772837368',
+  ),
+  Contact(
+    name: 'Pikachu',
     phone: '08818003442',
   ),
-
-   Contact(
-    name: 'ace',
-    phone: '0813121415177',
-  ),
-
   Contact(
-    name: 'lupi',
-    phone: '0899283788221',
-  ),
-
-  Contact(
-    name: 'ame',
-    phone: '081311712335',
-  ),
-
-  Contact(
-    name: 'sabo',
+    name: 'Sabo',
     phone: '081212689097',
   ),
 
   Contact(
-    name: 'yeu',
+    name: 'whothisguy',
+    phone: '081312609097',
+  ),
+
+  Contact(
+    name: 'Yeu',
     phone: '089771652001',
-  ),
 
-  Contact(
-    name: 'fui',
-    phone: '081889283741',
+    
   ),
-
-  Contact(
-    name: 'abeth',
-    phone: '081216672830',
-  ),
-
-  Contact(
-    name: 'carl',
-    phone: '0814536743992',
-  ),
-
-    Contact(
-    name: 'miya',
-    phone: '0856772837368',
-  ),
-
- Contact(
-    name: 'karina',
-    phone: '0812436289392',
-  ),
-
 ];
+
