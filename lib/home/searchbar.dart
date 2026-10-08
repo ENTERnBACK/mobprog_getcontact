@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'contacts.dart';
 import 'contact_detail.dart';
 import 'my_tags.dart';
+import 'who_viewed_profile.dart';
 
 import '../searched_profile/searched_profile_screen.dart';
 
@@ -19,9 +20,7 @@ class ContactSearchPage extends StatefulWidget {
       _ContactSearchPageState();
 }
 
-class _ContactSearchPageState
-    extends State<ContactSearchPage> {
-
+class _ContactSearchPageState extends State<ContactSearchPage> {
   List<Contact> filteredContacts = [];
 
   bool isSearching = false;
@@ -35,12 +34,10 @@ class _ContactSearchPageState
       name: 'Andi',
       phone: '08123456789',
     ),
-
     Contact(
       name: 'Caca',
       phone: '08818003442',
     ),
-
     Contact(
       name: 'Fajar',
       phone: '082112345678',
@@ -56,12 +53,10 @@ class _ContactSearchPageState
       name: 'Budi',
       phone: '08567891234',
     ),
-
     Contact(
       name: 'Aerosol',
       phone: '08123456789',
     ),
-
     Contact(
       name: 'Dedi',
       phone: '08987654321',
@@ -100,7 +95,8 @@ class _ContactSearchPageState
   }
 
   // ======================================================
-  // SEARCH RESULT → SEARCHED PROFILE
+  // SEARCH / RECENT
+  // → SEARCHED PROFILE
   // ======================================================
 
   void _openSearchedProfile(Contact contact) {
@@ -161,7 +157,6 @@ class _ContactSearchPageState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             const SizedBox(height: 15),
 
             // ======================================================
@@ -171,7 +166,6 @@ class _ContactSearchPageState
             const Center(
               child: Column(
                 children: [
-
                   Icon(
                     Icons.contacts,
                     color: Colors.white,
@@ -219,9 +213,7 @@ class _ContactSearchPageState
 
                 decoration: BoxDecoration(
                   color: const Color(0xFF1E1E1E),
-                  borderRadius:
-                      BorderRadius.circular(12),
-
+                  borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: Colors.grey.shade700,
                     width: 1,
@@ -230,7 +222,6 @@ class _ContactSearchPageState
 
                 child: const Row(
                   children: [
-
                     Icon(
                       Icons.contacts_outlined,
                       color: Colors.white,
@@ -262,14 +253,21 @@ class _ContactSearchPageState
             const SizedBox(height: 25),
 
             // ======================================================
+            // WHO VIEWED MY PROFILE
+            // ======================================================
+
+            const WhoViewedMyProfile(),
+
+            const SizedBox(height: 25),
+
+            // ======================================================
             // SEARCH BAR
             // ======================================================
 
             Container(
               decoration: BoxDecoration(
                 color: const Color(0xFF1E1E1E),
-                borderRadius:
-                    BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(15),
               ),
 
               child: TextField(
@@ -280,8 +278,7 @@ class _ContactSearchPageState
                 ),
 
                 decoration: const InputDecoration(
-                  hintText:
-                      'Cari nama atau nomor...',
+                  hintText: 'Cari nama atau nomor...',
 
                   hintStyle: TextStyle(
                     color: Colors.grey,
@@ -294,8 +291,7 @@ class _ContactSearchPageState
 
                   border: InputBorder.none,
 
-                  contentPadding:
-                      EdgeInsets.symmetric(
+                  contentPadding: EdgeInsets.symmetric(
                     vertical: 15,
                   ),
                 ),
@@ -309,7 +305,6 @@ class _ContactSearchPageState
             // ======================================================
 
             if (!isSearching) ...[
-
               const Text(
                 'My Tags',
                 style: TextStyle(
@@ -349,46 +344,32 @@ class _ContactSearchPageState
             // ======================================================
 
             if (isSearching)
-
               filteredContacts.isNotEmpty
-
                   ? ListView.builder(
                       shrinkWrap: true,
-
                       physics:
                           const NeverScrollableScrollPhysics(),
-
-                      itemCount:
-                          filteredContacts.length,
-
-                      itemBuilder:
-                          (context, index) {
-
+                      itemCount: filteredContacts.length,
+                      itemBuilder: (context, index) {
                         final contact =
                             filteredContacts[index];
 
                         return _contactCard(
                           contact,
-
-                          // SEARCH
-                          // → SEARCHED PROFILE
                           () => _openSearchedProfile(
                             contact,
                           ),
                         );
                       },
                     )
-
                   : const Padding(
-                      padding:
-                          EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         vertical: 30,
                       ),
 
                       child: Center(
                         child: Text(
                           'Kontak tidak ditemukan',
-
                           style: TextStyle(
                             color: Colors.grey,
                             fontSize: 16,
@@ -402,27 +383,17 @@ class _ContactSearchPageState
             // ======================================================
 
             if (!isSearching)
-
               ListView.builder(
                 shrinkWrap: true,
-
                 physics:
                     const NeverScrollableScrollPhysics(),
-
-                itemCount:
-                    recentContacts.length,
-
-                itemBuilder:
-                    (context, index) {
-
+                itemCount: recentContacts.length,
+                itemBuilder: (context, index) {
                   final contact =
                       recentContacts[index];
 
                   return _contactCard(
                     contact,
-
-                    // RECENT SEARCH
-                    // → SEARCHED PROFILE
                     () => _openSearchedProfile(
                       contact,
                     ),
@@ -437,10 +408,8 @@ class _ContactSearchPageState
             // ======================================================
 
             if (!isSearching) ...[
-
               const Text(
                 'Recent Calls',
-
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 19,
@@ -452,24 +421,15 @@ class _ContactSearchPageState
 
               ListView.builder(
                 shrinkWrap: true,
-
                 physics:
                     const NeverScrollableScrollPhysics(),
-
-                itemCount:
-                    recentCalls.length,
-
-                itemBuilder:
-                    (context, index) {
-
+                itemCount: recentCalls.length,
+                itemBuilder: (context, index) {
                   final contact =
                       recentCalls[index];
 
                   return _callCard(
                     contact,
-
-                    // RECENT CALL
-                    // → SEARCHED PROFILE
                     () => _openSearchedProfile(
                       contact,
                     ),
@@ -493,7 +453,6 @@ class _ContactSearchPageState
     Contact contact,
     VoidCallback onTap,
   ) {
-
     return Container(
       margin: const EdgeInsets.only(
         bottom: 12,
@@ -501,14 +460,11 @@ class _ContactSearchPageState
 
       decoration: BoxDecoration(
         color: const Color(0xFF1E1E1E),
-        borderRadius:
-            BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(15),
       ),
 
       child: ListTile(
-
-        contentPadding:
-            const EdgeInsets.symmetric(
+        contentPadding: const EdgeInsets.symmetric(
           horizontal: 15,
           vertical: 5,
         ),
@@ -517,9 +473,7 @@ class _ContactSearchPageState
 
         leading: const CircleAvatar(
           radius: 25,
-
-          backgroundColor:
-              Color(0xFF333333),
+          backgroundColor: Color(0xFF333333),
 
           child: Icon(
             Icons.person,
@@ -562,7 +516,6 @@ class _ContactSearchPageState
     Contact contact,
     VoidCallback onTap,
   ) {
-
     return Container(
       margin: const EdgeInsets.only(
         bottom: 12,
@@ -570,14 +523,11 @@ class _ContactSearchPageState
 
       decoration: BoxDecoration(
         color: const Color(0xFF1E1E1E),
-        borderRadius:
-            BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(15),
       ),
 
       child: ListTile(
-
-        contentPadding:
-            const EdgeInsets.symmetric(
+        contentPadding: const EdgeInsets.symmetric(
           horizontal: 15,
           vertical: 5,
         ),
@@ -586,9 +536,7 @@ class _ContactSearchPageState
 
         leading: const CircleAvatar(
           radius: 25,
-
-          backgroundColor:
-              Color(0xFF333333),
+          backgroundColor: Color(0xFF333333),
 
           child: Icon(
             Icons.call,
@@ -634,7 +582,6 @@ class ContactsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.black,
 
@@ -659,7 +606,6 @@ class ContactsPage extends StatelessWidget {
 
         title: const Text(
           'Contacts',
-
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -672,18 +618,12 @@ class ContactsPage extends StatelessWidget {
       // ======================================================
 
       body: ListView.builder(
+        padding: const EdgeInsets.all(20),
 
-        padding:
-            const EdgeInsets.all(20),
+        itemCount: contacts.length,
 
-        itemCount:
-            contacts.length,
-
-        itemBuilder:
-            (context, index) {
-
-          final contact =
-              contacts[index];
+        itemBuilder: (context, index) {
+          final contact = contacts[index];
 
           return Container(
             margin: const EdgeInsets.only(
@@ -691,15 +631,12 @@ class ContactsPage extends StatelessWidget {
             ),
 
             decoration: BoxDecoration(
-              color:
-                  const Color(0xFF1E1E1E),
-
+              color: const Color(0xFF1E1E1E),
               borderRadius:
                   BorderRadius.circular(15),
             ),
 
             child: ListTile(
-
               contentPadding:
                   const EdgeInsets.symmetric(
                 horizontal: 15,
@@ -707,15 +644,13 @@ class ContactsPage extends StatelessWidget {
               ),
 
               // ======================================================
-              // CONTACT
+              // MY CONTACTS
               // → CONTACT DETAIL
               // ======================================================
 
               onTap: () {
-
                 Navigator.push(
                   context,
-
                   MaterialPageRoute(
                     builder: (context) =>
                         ContactDetailPage(
@@ -728,7 +663,6 @@ class ContactsPage extends StatelessWidget {
 
               leading: const CircleAvatar(
                 radius: 25,
-
                 backgroundColor:
                     Color(0xFF333333),
 
