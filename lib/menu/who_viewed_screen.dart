@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../searched_profile/searched_profile_screen.dart';
 import 'widgets/menu_helpers.dart';
 
 class _Viewer {
   final String name;
+  final String number;
   final String time;
-  const _Viewer(this.name, this.time);
+  const _Viewer(this.name, this.number, this.time);
 }
 
 class WhoViewedScreen extends StatefulWidget {
@@ -17,14 +19,26 @@ class WhoViewedScreen extends StatefulWidget {
 
 class _WhoViewedScreenState extends State<WhoViewedScreen> {
   List<_Viewer> _viewers = const [
-    _Viewer('Andi', '5 minutes ago'),
-    _Viewer('Budi', '32 minutes ago'),
-    _Viewer('Cica', '2 hours ago'),
-    _Viewer('Dedi', '5 hours ago'),
-    _Viewer('Nomor tidak dikenal (+62812xxxx)', 'Yesterday'),
-    _Viewer('Sari', 'Yesterday'),
-    _Viewer('Rina', '3 days ago'),
+    _Viewer('Andi', '081234567890', '5 minutes ago'),
+    _Viewer('Budi', '085678912345', '32 minutes ago'),
+    _Viewer('Caca', '087123456789', '2 hours ago'),
+    _Viewer('Dedi', '089676543210', '5 hours ago'),
+    _Viewer('Fajar', '081355577799', 'Yesterday'),
+    _Viewer('Aerosol', '082144455566', 'Yesterday'),
+    _Viewer('Nomor tidak dikenal', '081299988877', '3 days ago'),
   ];
+
+  void _openProfile(_Viewer v) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => SearchedProfileScreen(
+          phoneNumber: v.number,
+          contactName: v.name,
+        ),
+      ),
+    );
+  }
 
   Future<void> _clear() async {
     final ok = await showDialog<bool>(
@@ -83,6 +97,7 @@ class _WhoViewedScreenState extends State<WhoViewedScreen> {
                       borderRadius: BorderRadius.circular(16),
                       clipBehavior: Clip.antiAlias,
                       child: ListTile(
+                        onTap: () => _openProfile(v),
                         leading: CircleAvatar(
                           backgroundColor: kAccent,
                           child: Text(v.name[0].toUpperCase(),
@@ -92,8 +107,11 @@ class _WhoViewedScreenState extends State<WhoViewedScreen> {
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600)),
-                        subtitle: Text(v.time,
-                            style: const TextStyle(color: Colors.grey)),
+                        subtitle: Text('${v.number} · ${v.time}',
+                            style: const TextStyle(
+                                color: Colors.grey, fontSize: 12)),
+                        trailing: const Icon(Icons.chevron_right,
+                            color: Colors.grey),
                       ),
                     ),
                   ),
