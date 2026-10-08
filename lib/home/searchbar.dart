@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'contacts.dart';
 import '../chats/chats.dart';
 import 'my_tags.dart';
+import '../searched_profile/searched_profile_screen.dart';
 
 class ContactSearchPage extends StatefulWidget {
   const ContactSearchPage({super.key});
@@ -83,16 +84,16 @@ class _ContactSearchPageState extends State<ContactSearchPage> {
   // BUKA DETAIL CONTACT
   // =========================
   void _openContactDetail(Contact contact) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ContactDetailPage(
-          name: contact.name,
-          phone: contact.phone,
-        ),
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => SearchedProfileScreen(
+        phoneNumber: contact.phone,
+        contactName: contact.name,
       ),
-    );
-  }
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
