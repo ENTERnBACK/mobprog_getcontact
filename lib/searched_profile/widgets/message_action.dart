@@ -4,33 +4,43 @@ import '../../chats/chat_room_screen.dart';
 class MessageAction extends StatelessWidget {
   final String contactName;
   final String phoneNumber;
+  final bool isBlocked; 
   
-  const MessageAction({super.key, required this.contactName, required this.phoneNumber});
+  const MessageAction({
+    super.key,
+    required this.contactName,
+    required this.phoneNumber,
+    required this.isBlocked,
+  });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton.icon(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ChatRoomScreen(
-                name: contactName,
-                number: phoneNumber,
-              ),
-            ),
-          );
-        },
-        icon: const Icon(Icons.chat_bubble_outline),
-        label: const Text(
-          'Send Message',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        onPressed: isBlocked
+            ? null
+            : () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChatRoomScreen(
+                      name: contactName,
+                      number: phoneNumber,
+                    ),
+                  ),
+                );
+              },
+        icon: Icon(isBlocked ? Icons.block : Icons.chat_bubble_outline),
+        label: Text(
+          isBlocked ? 'Unblock to Send Message' : 'Send Message',
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.blueAccent,
           foregroundColor: Colors.white,
+          disabledBackgroundColor: Colors.grey.shade800, 
+          disabledForegroundColor: Colors.grey.shade400, 
           padding: const EdgeInsets.symmetric(vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
