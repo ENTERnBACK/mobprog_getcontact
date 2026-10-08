@@ -83,9 +83,9 @@ class _PersonalNoteState extends State<PersonalNote> {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: Colors.amber.withValues(alpha: 0.1),
+        color: const Color(0xFF1E1E1E),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.amber.withValues(alpha: 0.3)),
+        border: Border.all(color: Colors.amber.shade800.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,7 +125,7 @@ class _PersonalNoteState extends State<PersonalNote> {
               : Text(
                   _noteText.isEmpty ? 'Belum ada catatan. Tambahkan sekarang.' : _noteText,
                   style: TextStyle(
-                    color: _noteText.isEmpty ? Colors.grey : Colors.black87,
+                    color: _noteText.isEmpty ? Colors.grey : Colors.white,
                     height: 1.4,
                     fontStyle: _noteText.isEmpty ? FontStyle.italic : FontStyle.normal,
                   ),

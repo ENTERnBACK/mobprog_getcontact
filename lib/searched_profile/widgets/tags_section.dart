@@ -88,13 +88,13 @@ class _TagsSectionState extends State<TagsSection> {
             const Icon(Icons.sell, color: Colors.blueAccent, size: 20),
             const SizedBox(width: 8),
             const Text(
-              'Penanda (Tags)',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              'Tags',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Colors.white),
             ),
             const Spacer(),
             Text(
               '${_tags.length} Tags',
-              style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+              style: TextStyle(color: Colors.grey.shade400, fontSize: 14),
             ),
           ],
         ),
@@ -133,9 +133,9 @@ class _TagsSectionState extends State<TagsSection> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.add, size: 16, color: Colors.grey.shade700),
-                    const SizedBox(width: 4),
-                    Text('Tambah', style: TextStyle(color: Colors.grey.shade700, fontWeight: FontWeight.w600)),
+                    Icon(Icons.add, size: 16, color: Colors.grey.shade300),
+                     const SizedBox(width: 4),
+                     Text('Add Tag', style: TextStyle(color: Colors.grey.shade300, fontWeight: FontWeight.w600)),
                   ],
                 ),
               ),

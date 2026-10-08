@@ -39,8 +39,8 @@ class MessageAction extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.blueAccent,
           foregroundColor: Colors.white,
-          disabledBackgroundColor: Colors.grey.shade300, 
-          disabledForegroundColor: Colors.grey.shade600, 
+          disabledBackgroundColor: Colors.grey.shade800, 
+          disabledForegroundColor: Colors.grey.shade400, 
           padding: const EdgeInsets.symmetric(vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),

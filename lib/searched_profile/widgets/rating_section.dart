@@ -114,9 +114,9 @@ class _RatingSectionState extends State<RatingSection> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.blue.withValues(alpha: 0.05),
+        color: const Color(0xFF1E1E1E),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.blue.withValues(alpha: 0.1)),
+        border: Border.all(color: Color(0xFF1E1E1E).withValues(alpha: 0.1)),
       ),
       child: Column(
         children: [
@@ -159,7 +159,7 @@ class _RatingSectionState extends State<RatingSection> {
                     const SizedBox(height: 4),
                     Text(
                       'Based on $totalReviews community reviews',
-                      style: TextStyle(color: Colors.grey.shade700, fontSize: 13),
+                      style: TextStyle(color: Colors.grey, fontSize: 13),
                     ),
                   ],
                 ),
