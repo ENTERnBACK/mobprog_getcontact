@@ -26,6 +26,8 @@ class StorageKeys {
   static const scTags = 'shortcut_tags';
 
   static const email = 'account_email';
+  static const authPassword = 'auth_password';
+  static const authLoggedIn = 'auth_logged_in';
 }
 
 class MenuStorageService {
