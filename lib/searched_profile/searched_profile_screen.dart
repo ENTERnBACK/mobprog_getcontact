@@ -91,18 +91,18 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Profile Number'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        title: const Text('Profile Details'),
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
         elevation: 0.5,
         actions: [
           // Tombol Save
           IconButton(
             icon: Icon(
               _isSaved ? Icons.bookmark : Icons.bookmark_border,
-              color: _isSaved ? Colors.blueAccent : Colors.black,
+              color: _isSaved ? Colors.blueAccent : Colors.white,
             ),
             onPressed: () {
               setState(() {
@@ -120,7 +120,7 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
           
           // Tombol Share
           IconButton(
-            icon: const Icon(Icons.share_outlined),
+            icon: const Icon(Icons.share_outlined, color: Colors.white),
             onPressed: () {
               final String shareText = 'Check out this profile: ${widget.contactName} with the number ${widget.phoneNumber} on our app!';
               
@@ -131,7 +131,7 @@ class _SearchedProfileScreenState extends State<SearchedProfileScreen> {
           IconButton(
             icon: Icon(
               _isBlocked ? Icons.block : Icons.block_outlined,
-              color: _isBlocked ? Colors.redAccent : Colors.grey.shade700,
+              color: _isBlocked ? Colors.redAccent : Colors.white,
             ),
             tooltip: _isBlocked ? 'Unblock' : 'Block Contact',
             onPressed: () {

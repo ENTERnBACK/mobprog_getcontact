@@ -16,12 +16,12 @@ class CommentsSection extends StatelessWidget {
             const SizedBox(width: 8),
             const Text(
               'Comments',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
             ),
             const Spacer(),
             Text(
               '${comments.length} Comments',
-              style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+              style: TextStyle(color: Colors.grey.shade400, fontSize: 14), 
             ),
           ],
         ),
@@ -30,7 +30,7 @@ class CommentsSection extends StatelessWidget {
           shrinkWrap: true, 
           physics: const NeverScrollableScrollPhysics(),
           itemCount: comments.length,
-          separatorBuilder: (context, index) => Divider(color: Colors.grey.shade200),
+          separatorBuilder: (context, index) => Divider(color: Colors.grey.shade800),
           itemBuilder: (context, index) {
             final comment = comments[index];
             return ListTile(
@@ -45,15 +45,15 @@ class CommentsSection extends StatelessWidget {
               ),
               title: Text(
                 comment['name']!, 
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15)
-              ),
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white)
+               ),
               subtitle: Padding(
                 padding: const EdgeInsets.only(top: 4.0),
                 child: Text(
                   comment['text']!,
-                  style: TextStyle(color: Colors.grey.shade700, height: 1.3),
-                ),
-              ),
+                  style: TextStyle(color: Colors.grey.shade400, height: 1.3), 
+                 ),
+               ),
             );
           },
         ),
