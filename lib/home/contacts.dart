@@ -1,6 +1,7 @@
 class Contact {
   final String name;
   final String phone;
+  
 
   Contact({
     required this.name,
@@ -94,5 +95,8 @@ final List<Contact> contacts = [
   Contact(
     name: 'Yeu',
     phone: '089771652001',
+
+    
   ),
 ];
+
