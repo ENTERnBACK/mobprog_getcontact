@@ -22,8 +22,8 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final MenuStorageService _storage = MenuStorageService();
 
-  String _name = 'Elizabeth';
-  String _phone = '+62800xxxx';
+  String _name = '';
+  String _phone = '';
   String? _imagePath;
   String? _birthday;
   bool _copyEnabled = true;
@@ -35,8 +35,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _load() async {
-    final name = await _storage.getString(StorageKeys.name, 'Elizabeth');
-    final phone = await _storage.getString(StorageKeys.phone, '+62800xxxx');
+    final name = await _storage.getString(StorageKeys.name, '');
+    final phone = await _storage.getString(StorageKeys.phone, '');
     final img = await _storage.getStringOrNull(StorageKeys.imagePath);
     final bday = await _storage.getStringOrNull(StorageKeys.birthday);
     final copy = await _storage.getBool(StorageKeys.scCopy, true);
@@ -51,6 +51,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _copyPhone() async {
+    if (_phone.isEmpty) {
+      showSnack(context, 'Nomor belum diisi', error: true);
+      return;
+    }
     if (!_copyEnabled) {
       showSnack(context, 'Aktifkan Quick Copy Number di Shortcuts', error: true);
       return;
@@ -59,6 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (mounted) showSnack(context, 'Nomor disalin: $_phone');
   }
 
+  /// Buka halaman lain, lalu refresh data saat kembali.
   Future<void> _open(Widget page) async {
     await Navigator.push(context, MaterialPageRoute(builder: (_) => page));
     _load();
@@ -92,7 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               const SizedBox(height: 14),
               Text(
-                _name,
+                _name.isEmpty ? 'Nama belum diisi' : _name,
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,
@@ -101,10 +106,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(height: 4),
               GestureDetector(
                 onLongPress: _copyPhone,
-                child: Text(_phone,
+                child: Text(_phone.isEmpty ? 'Nomor belum diisi' : _phone,
                     style: const TextStyle(color: Colors.grey, fontSize: 12)),
               ),
               const SizedBox(height: 20),
+
+              if (_name.isEmpty || _phone.isEmpty) ...[
+                Material(
+                  color: kCard,
+                  borderRadius: BorderRadius.circular(16),
+                  clipBehavior: Clip.antiAlias,
+                  child: ListTile(
+                    onTap: () => _open(const EditProfileScreen()),
+                    leading: const IconBadge(icon: Icons.person_add_alt_1),
+                    title: const Text('Lengkapi profilmu',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold)),
+                    subtitle: const Text(
+                        'Isi nama dan nomor telepon agar profil tampil lengkap.',
+                        style: TextStyle(color: Colors.grey, fontSize: 11)),
+                    trailing:
+                        const Icon(Icons.chevron_right, color: Colors.grey),
+                  ),
+                ),
+                const SizedBox(height: 12),
+              ],
 
               Material(
                 color: kCard,
