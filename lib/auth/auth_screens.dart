@@ -4,6 +4,8 @@ import 'widgets/auth_header.dart';
 import 'widgets/input.dart';
 import 'widgets/password.dart';
 import 'widgets/auth_tabs.dart';
+import 'auth_session.dart';
+import '../services/menu_storage_service.dart';
 
 class AuthScreen extends StatefulWidget {
   final bool isLoginAwal;
@@ -54,10 +56,16 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
 
-  void _submit() {
+    Future<void> _submit() async {
+
     if (!_formKey.currentState!.validate()) return;
 
     if (_isLogin) {
+
+      await MenuStorageService()
+          .setString(StorageKeys.phone, _idController.text.trim());
+      if (!mounted) return;
+
       Navigator.pushNamedAndRemoveUntil(context, '/menu', (route) => false);
     } 
     else {
